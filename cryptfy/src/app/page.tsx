@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { AnimatedHeroHeadline } from "@/components/ui/animated-hero";
 import { Tiles } from "@/components/ui/tiles";
 
 export default function Home() {
@@ -13,6 +14,14 @@ export default function Home() {
     { label: "Avg swap time", value: "1.2s" },
     { label: "Fees saved last 24h", value: "$128K" },
     { label: "Global traders", value: "174K+" },
+  ];
+
+  const animatedTitles = [
+    "cinematic infrastructure",
+    "multi-market precision",
+    "3D skyline intelligence",
+    "institutional routing",
+    "risk-aware execution",
   ];
 
   const featureCards = [
@@ -159,48 +168,63 @@ export default function Home() {
         </header>
 
         <main className="mt-20 flex flex-1 flex-col gap-16">
-          <section className="grid flex-1 grid-cols-1 items-center gap-16 lg:grid-cols-[1.05fr_1fr]">
-            <div className="space-y-10">
-              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/30 bg-white/5 px-4 py-1 text-xs uppercase tracking-[0.45em] text-emerald-200/90">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
-                Real-time execution rail
+          <section className="relative overflow-hidden px-8 py-16">
+            <div className="pointer-events-none absolute inset-0">
+              <div className="absolute left-1/2 top-[-25%] h-[48rem] w-[48rem] -translate-x-1/2 rounded-full bg-emerald-400/20 blur-[220px]" />
+              <div className="absolute left-1/2 top-[35%] h-[38rem] w-[46rem] -translate-x-1/2 -translate-y-1/2 rounded-[7rem] bg-gradient-to-br from-emerald-400/25 via-neutral-900/30 to-transparent blur-[40px]" />
+              <div className="absolute inset-x-12 bottom-10 flex justify-end text-xs uppercase tracking-[0.35em] text-white/45">
+                Immersive 3D skyline hero coming soon – drop your glTF assets to
+                activate the cinematic reveal.
               </div>
+            </div>
 
-              <div className="space-y-6">
-                <h1 className="text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
-                  High-speed swaps with{" "}
-                  <span className="bg-gradient-to-r from-emerald-200 via-lime-200 to-emerald-400 bg-clip-text text-transparent">
-                    cinematic infrastructure
-                  </span>
-                </h1>
-                <p className="max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
-                  Real Investment orchestrates 3D market visualisations,
-                  automated routing, and latency-aware liquidity so you can move
-                  size instantly—without overpaying on gas or slippage.
-                </p>
-              </div>
+            <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-12">
+              <div className="space-y-8">
+                <div className="flex justify-center">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/30 bg-white/5 px-4 py-1 text-xs uppercase tracking-[0.45em] text-emerald-200/90">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
+                    Real-time execution rail
+                  </div>
+                </div>
 
-              <div className="flex flex-wrap items-center gap-4">
-                <Link
-                  href="/trade"
-                  className="inline-flex items-center justify-center rounded-full bg-emerald-400/90 px-6 py-2.5 text-sm font-semibold text-black shadow-[0_0_40px_rgba(134,239,172,0.5)] transition hover:bg-emerald-300"
-                >
-                  Launch Terminal
-                </Link>
-                <Link
-                  href="#execution-core"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold text-white/80 transition hover:border-white/50 hover:text-white"
-                >
-                  Explore protocol
-                  <span className="h-2 w-2 rounded-full bg-emerald-300" />
-                </Link>
+                <div className="space-y-6 text-center">
+                  <h1 className="text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
+                    <span className="block">High-speed swaps with</span>
+                    <AnimatedHeroHeadline
+                      titles={animatedTitles}
+                      className="justify-center"
+                      wordClassName="bg-gradient-to-r from-emerald-200 via-lime-200 to-emerald-400 bg-clip-text text-transparent"
+                    />
+                  </h1>
+                  <p className="mx-auto max-w-2xl text-base leading-relaxed text-white/70 sm:text-lg">
+                    Real Investment orchestrates 3D market visualisations,
+                    automated routing, and latency-aware liquidity so you can
+                    move size instantly—without overpaying on gas or slippage.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center justify-center gap-4">
+                  <Link
+                    href="/trade"
+                    className="inline-flex items-center justify-center rounded-full bg-emerald-400/90 px-6 py-2.5 text-sm font-semibold text-black shadow-[0_0_40px_rgba(134,239,172,0.5)] transition hover:bg-emerald-300"
+                  >
+                    Launch Terminal
+                  </Link>
+                  <Link
+                    href="#execution-core"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold text-white/80 transition hover:border-white/50 hover:text-white"
+                  >
+                    Explore protocol
+                    <span className="h-2 w-2 rounded-full bg-emerald-300" />
+                  </Link>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
                 {stats.map((stat) => (
                   <div
                     key={stat.label}
-                    className="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[0_20px_60px_rgba(15,185,128,0.08)]"
+                    className="rounded-3xl border border-white/10 bg-white/5 p-5 text-center shadow-[0_20px_60px_rgba(15,185,128,0.08)]"
                   >
                     <p className="text-2xl font-semibold tracking-tight text-white">
                       {stat.value}
@@ -210,56 +234,6 @@ export default function Home() {
                     </p>
                   </div>
                 ))}
-              </div>
-            </div>
-
-            <div className="relative flex items-center justify-center">
-              <div className="absolute inset-0 rounded-[4rem] border border-white/10 bg-gradient-to-br from-white/10 via-emerald-300/10 to-white/0 backdrop-blur-xl" />
-              <div className="relative z-10 flex aspect-[4/5] w-full max-w-md flex-col justify-between overflow-hidden rounded-[3rem] border border-white/20 bg-gradient-to-br from-white/10 via-neutral-900/60 to-neutral-900/80 p-8 shadow-[0_35px_80px_rgba(0,0,0,0.35)]">
-                <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white/50">
-                  <span>Skyline View</span>
-                  <span>Prototype</span>
-                </div>
-
-                <div className="relative flex flex-1 items-center justify-center">
-                  <div className="absolute inset-10 rounded-full bg-gradient-to-b from-emerald-400/80 via-lime-200/50 to-transparent blur-3xl" />
-                  <div className="relative flex h-full w-full flex-col items-center justify-center rounded-[2.5rem] border border-white/15 bg-black/50 p-8 text-center">
-                    <span className="text-sm uppercase tracking-[0.4em] text-emerald-200/80">
-                      3D skyline module
-                    </span>
-                    <p className="mt-4 text-lg font-medium text-white/80">
-                      Drop your buildings here to activate the immersive hero.
-                    </p>
-                    <p className="mt-2 text-xs text-white/50">
-                      Supports glTF, WebGL, and volumetric light passes.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="rounded-2xl border border-white/15 bg-white/10 p-4 text-sm text-white/80">
-                    <p className="text-xs uppercase tracking-[0.25em] text-white/40">
-                      Latency
-                    </p>
-                    <p className="mt-1 text-xl font-semibold text-white">
-                      32ms
-                    </p>
-                    <p className="mt-2 text-[0.7rem] text-emerald-200">
-                      Synced to render loop
-                    </p>
-                  </div>
-                  <div className="rounded-2xl border border-white/15 bg-white/5 p-4 text-sm text-white/80">
-                    <p className="text-xs uppercase tracking-[0.25em] text-white/40">
-                      Throughput
-                    </p>
-                    <p className="mt-1 text-xl font-semibold text-white">
-                      450 FPS
-                    </p>
-                    <p className="mt-2 text-[0.7rem] text-emerald-200">
-                      Streams ready
-                    </p>
-                  </div>
-                </div>
               </div>
             </div>
           </section>

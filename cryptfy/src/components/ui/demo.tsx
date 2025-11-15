@@ -1,5 +1,6 @@
 "use client";
 
+import { Hero } from "@/components/ui/animated-hero";
 import { Tiles } from "@/components/ui/tiles";
 
 export function TilesDemo() {
@@ -10,4 +11,11 @@ export function TilesDemo() {
   );
 }
 
+export function HeroDemo() {
+  return (
+    <div className="block">
+      <Hero />
+    </div>
+  );
+}
 
