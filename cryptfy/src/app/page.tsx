@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { UserRound } from "lucide-react";
 
 import { AnimatedHeroHeadline } from "@/components/ui/animated-hero";
 import { Tiles } from "@/components/ui/tiles";
@@ -148,7 +149,7 @@ export default function Home() {
                 className="hidden h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/10 text-sm font-semibold text-white/80 transition hover:border-emerald-300/60 hover:text-white md:flex"
               >
                 <span className="sr-only">Profile</span>
-                <span className="text-xs uppercase tracking-[0.3em]">ID</span>
+                <UserRound className="h-5 w-5" aria-hidden="true" />
               </Link>
               <Link
                 href="/login"
