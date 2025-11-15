@@ -1,5 +1,12 @@
+import Link from "next/link";
+
 export default function Home() {
-  const navLinks = ["Trade", "Product", "About", "Community", "Contact"];
+  const navLinks = [
+    { label: "Trade", href: "/trade" },
+    { label: "Portfolio", href: "/portfolio" },
+    { label: "About", href: "#execution-core" },
+    { label: "Community", href: "#community" },
+  ];
   const stats = [
     { label: "Avg swap time", value: "1.2s" },
     { label: "Fees saved last 24h", value: "$128K" },
@@ -73,30 +80,30 @@ export default function Home() {
 
           <nav className="hidden gap-8 text-sm font-medium text-white/80 md:flex">
             {navLinks.map((item) => (
-              <a
-                key={item}
-                href="#"
+              <Link
+                key={item.label}
+                href={item.href}
                 className="transition hover:text-white hover:drop-shadow-[0_0_12px_rgba(163,255,204,0.7)]"
               >
-                {item}
-              </a>
+                {item.label}
+              </Link>
             ))}
           </nav>
 
           <div className="flex items-center gap-3">
-            <button
-              type="button"
+            <Link
+              href="/login"
               className="hidden rounded-full border border-white/15 px-5 py-2 text-sm font-medium text-white/80 transition hover:border-white/40 hover:text-white md:block"
             >
               Login
-            </button>
-            <button
-              type="button"
+            </Link>
+            <Link
+              href="/trade"
               className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-400 via-lime-200 to-emerald-500 px-6 py-2 text-sm font-semibold text-black shadow-[0_0_35px_rgba(163,255,204,0.45)] transition hover:scale-[1.02]"
             >
               Trade now
               <span className="block h-2 w-2 rounded-full bg-black transition group-hover:translate-x-1" />
-            </button>
+            </Link>
           </div>
         </header>
 
@@ -123,19 +130,19 @@ export default function Home() {
               </div>
 
               <div className="flex flex-wrap items-center gap-4">
-                <button
-                  type="button"
+                <Link
+                  href="/trade"
                   className="inline-flex items-center justify-center rounded-full bg-emerald-400/90 px-6 py-2.5 text-sm font-semibold text-black shadow-[0_0_40px_rgba(134,239,172,0.5)] transition hover:bg-emerald-300"
                 >
                   Launch Terminal
-                </button>
-                <button
-                  type="button"
+                </Link>
+                <Link
+                  href="#execution-core"
                   className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold text-white/80 transition hover:border-white/50 hover:text-white"
                 >
                   Explore protocol
                   <span className="h-2 w-2 rounded-full bg-emerald-300" />
-                </button>
+                </Link>
               </div>
 
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
@@ -199,14 +206,17 @@ export default function Home() {
                     </p>
                     <p className="mt-2 text-[0.7rem] text-emerald-200">
                       Streams ready
-                    </p>
-                  </div>
+          </p>
+        </div>
                 </div>
               </div>
             </div>
           </section>
 
-          <section className="rounded-[3rem] border border-white/10 bg-white/5 p-10 shadow-[0_25px_70px_rgba(12,123,89,0.17)] backdrop-blur">
+          <section
+            id="execution-core"
+            className="rounded-[3rem] border border-white/10 bg-white/5 p-10 shadow-[0_25px_70px_rgba(12,123,89,0.17)] backdrop-blur"
+          >
             <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-2xl space-y-4">
                 <p className="text-sm uppercase tracking-[0.4em] text-emerald-200/80">
@@ -253,7 +263,10 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr]">
+          <section
+            id="community"
+            className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr]"
+          >
             <div className="rounded-[3rem] border border-white/5 bg-white/5 p-8 backdrop-blur">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-semibold text-white">Market flight deck</h2>
@@ -351,8 +364,8 @@ export default function Home() {
             </a>
             <a href="#" className="transition hover:text-white">
               Careers
-            </a>
-          </div>
+          </a>
+        </div>
         </footer>
       </div>
     </div>
