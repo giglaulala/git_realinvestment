@@ -7,8 +7,6 @@ export default function Home() {
   const navLinks = [
     { label: "Trade", href: "/trade" },
     { label: "Portfolio", href: "/portfolio" },
-    { label: "Community", href: "#community" },
-    { label: "About", href: "#execution-core" },
   ];
   const stats = [
     { label: "Avg swap time", value: "1.2s" },
@@ -131,39 +129,34 @@ export default function Home() {
             </div>
           </div>
 
-          <nav className="hidden gap-8 text-sm font-medium text-white/80 md:flex">
-            {navLinks.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="transition hover:text-white hover:drop-shadow-[0_0_12px_rgba(163,255,204,0.7)]"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
+          <div className="flex items-center gap-4 md:gap-6">
+            <nav className="hidden items-center gap-6 text-sm font-medium text-white/80 md:flex">
+              {navLinks.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="transition hover:text-white hover:drop-shadow-[0_0_12px_rgba(163,255,204,0.7)]"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
 
-          <div className="flex items-center gap-3">
-            <Link
-              href="/profile"
-              className="hidden h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/10 text-sm font-semibold text-white/80 transition hover:border-emerald-300/60 hover:text-white md:flex"
-            >
-              <span className="sr-only">Profile</span>
-              <span className="text-xs uppercase tracking-[0.3em]">ID</span>
-            </Link>
-            <Link
-              href="/login"
-              className="hidden rounded-full border border-white/15 px-5 py-2 text-sm font-medium text-white/80 transition hover:border-white/40 hover:text-white md:block"
-            >
-              Login
-            </Link>
-            <Link
-              href="/trade"
-              className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-400 via-lime-200 to-emerald-500 px-6 py-2 text-sm font-semibold text-black shadow-[0_0_35px_rgba(163,255,204,0.45)] transition hover:scale-[1.02]"
-            >
-              Trade now
-              <span className="block h-2 w-2 rounded-full bg-black transition group-hover:translate-x-1" />
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link
+                href="/profile"
+                className="hidden h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/10 text-sm font-semibold text-white/80 transition hover:border-emerald-300/60 hover:text-white md:flex"
+              >
+                <span className="sr-only">Profile</span>
+                <span className="text-xs uppercase tracking-[0.3em]">ID</span>
+              </Link>
+              <Link
+                href="/login"
+                className="hidden rounded-full border border-white/15 px-5 py-2 text-sm font-medium text-white/80 transition hover:border-white/40 hover:text-white md:block"
+              >
+                Login
+              </Link>
+            </div>
           </div>
         </header>
 
