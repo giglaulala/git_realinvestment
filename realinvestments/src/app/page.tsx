@@ -142,7 +142,7 @@ export default function Home() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-neutral-950 text-white">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/30 to-transparent" />
         <div className="absolute inset-0 opacity-45 [--tile:rgba(213,255,236,0.85)]">
           <Tiles
             rows={120}
@@ -156,7 +156,7 @@ export default function Home() {
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col px-6 pb-24 pt-8 sm:px-10 lg:px-16">
         <header className="flex flex-wrap items-center justify-between gap-6 rounded-full border border-white/10 bg-white/5 px-6 py-4 backdrop-blur">
           <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 via-lime-300 to-emerald-500 text-base font-semibold text-black shadow-[0_0_40px_rgba(163,255,204,0.6)]">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 via-lime-300 to-emerald-500 text-base font-semibold text-black shadow-[0_0_40px_rgba(163,255,204,0.6)]">
               RI
             </span>
             <div>
@@ -243,7 +243,7 @@ export default function Home() {
         </header>
 
         <main className="mt-20 flex flex-1 flex-col gap-16">
-          <section className="relative overflow-hidden px-8 py-16">
+          <section className="relative px-8 py-16">
             <div className="pointer-events-none absolute inset-0">
               <HeroModelBackdrop />
               <div className="absolute inset-x-12 bottom-10 flex justify-end text-xs uppercase tracking-[0.35em] text-white/45">
@@ -351,7 +351,7 @@ export default function Home() {
               {featureCards.map((feature) => (
                 <article
                   key={feature.title}
-                  className="group flex h-full flex-col justify-between rounded-3xl border border-white/10 bg-gradient-to-br from-white/8 via-neutral-900/70 to-neutral-900/90 p-6 transition duration-300 hover:border-emerald-300/40 hover:shadow-[0_40px_80px_rgba(134,239,172,0.18)]"
+                  className="group flex h-full flex-col justify-between rounded-3xl border border-white/10 bg-linear-to-br from-white/8 via-neutral-900/70 to-neutral-900/90 p-6 transition duration-300 hover:border-emerald-300/40 hover:shadow-[0_40px_80px_rgba(134,239,172,0.18)]"
                 >
                   <div>
                     <h3 className="text-xl font-semibold text-white">
@@ -430,7 +430,7 @@ export default function Home() {
             </div>
 
             <div className="space-y-6">
-              <div className="rounded-[2.5rem] border border-white/10 bg-gradient-to-br from-white/10 via-neutral-900/80 to-neutral-900/95 p-8 backdrop-blur">
+              <div className="rounded-[2.5rem] border border-white/10 bg-linear-to-br from-white/10 via-neutral-900/80 to-neutral-900/95 p-8 backdrop-blur">
                 <h2 className="text-2xl font-semibold text-white">
                   Investment management & exit
                 </h2>

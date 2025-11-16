@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "sync:design-assets": "node scripts/sync-design-assets.mjs",
+    "predev": "npm run sync:design-assets",
+    "prebuild": "npm run sync:design-assets",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
