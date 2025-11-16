@@ -22,8 +22,16 @@ const teams = [
 
 const sessions = [
   { device: "MacBook Air • Safari", location: "Tbilisi", time: "Active now" },
-  { device: "iPhone • Real Investment App", location: "Batumi", time: "Today, 09:14" },
-  { device: "ThinkPad • Chrome", location: "Kutaisi", time: "Yesterday, 22:48" },
+  {
+    device: "iPhone • Real Investment App",
+    location: "Batumi",
+    time: "Today, 09:14",
+  },
+  {
+    device: "ThinkPad • Chrome",
+    location: "Kutaisi",
+    time: "Yesterday, 22:48",
+  },
 ];
 
 const preferences = [
@@ -76,7 +84,9 @@ export default function ProfilePage() {
                 <p className="text-xs uppercase tracking-[0.3em] text-white/40">
                   {item.label}
                 </p>
-                <p className="mt-2 text-sm font-semibold text-white">{item.value}</p>
+                <p className="mt-2 text-sm font-semibold text-white">
+                  {item.value}
+                </p>
               </div>
             ))}
           </div>
@@ -106,7 +116,9 @@ export default function ProfilePage() {
                   className="flex items-center justify-between rounded-2xl border border-white/12 bg-black/35 px-5 py-4"
                 >
                   <div>
-                    <p className="text-base font-semibold text-white">{team.name}</p>
+                    <p className="text-base font-semibold text-white">
+                      {team.name}
+                    </p>
                     <p className="text-xs uppercase tracking-[0.25em] text-white/40">
                       {team.members} members
                     </p>
@@ -122,7 +134,9 @@ export default function ProfilePage() {
           <aside className="flex flex-col gap-6">
             <div className="rounded-[2.2rem] border border-white/12 bg-white/6 p-6 backdrop-blur">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-white">Recent sessions</h3>
+                <h3 className="text-lg font-semibold text-white">
+                  Recent sessions
+                </h3>
                 <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.25em] text-white/50">
                   Live
                 </span>
@@ -133,7 +147,9 @@ export default function ProfilePage() {
                     key={`${session.device}-${session.time}`}
                     className="rounded-2xl border border-white/12 bg-black/35 p-4"
                   >
-                    <p className="text-sm font-semibold text-white">{session.device}</p>
+                    <p className="text-sm font-semibold text-white">
+                      {session.device}
+                    </p>
                     <p className="text-xs text-white/50">
                       {session.location} • {session.time}
                     </p>
@@ -143,9 +159,13 @@ export default function ProfilePage() {
             </div>
 
             <div className="rounded-[2.2rem] border border-emerald-200/40 bg-emerald-400/18 p-6 text-white shadow-[0_30px_80px_rgba(134,239,172,0.4)]">
-              <h3 className="text-lg font-semibold text-white">Need to update compliance?</h3>
+              <h3 className="text-lg font-semibold text-white">
+                Need to update compliance?
+              </h3>
               <p className="mt-2 text-sm text-white/80">
-                Add a new Georgian bank account, refresh your KYC documents, or appoint a proxy investor. Our compliance team responds within one business day.
+                Add a new Georgian bank account, refresh your KYC documents, or
+                appoint a proxy investor. Our compliance team responds within
+                one business day.
               </p>
               <Link
                 href="/trade"
@@ -160,5 +180,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-

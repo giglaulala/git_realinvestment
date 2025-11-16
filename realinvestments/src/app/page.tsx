@@ -441,15 +441,15 @@ export default function Home() {
                 {trustSignals.map((signal) => (
                   <li
                     key={signal.title}
-                    className="rounded-2xl border border-neutral-900/10 bg-white/60 p-4"
+                    className="rounded-2xl border border-neutral-900/10"
                   >
-                    <p className="text-xs uppercase tracking-[0.3em] text-white/70">
+                    <p className="text-s uppercase tracking-[0.3em] text-white/70 font-bold">
                       {signal.title}
                     </p>
                     <p className="mt-2">{signal.body}</p>
                   </li>
                 ))}
-                <li className="rounded-2xl border border-neutral-900/10 bg-white/60 p-4">
+                <li className="rounded-2xl border border-neutral-900/10">
                   <p className="text-xs uppercase tracking-[0.3em] text-white/70">
                     Transaction fee
                   </p>
@@ -465,6 +465,19 @@ export default function Home() {
               >
                 Download fee schedule
               </button>
+            </div>
+          </section>
+
+          <section className="relative mt-24 flex min-h-[70vh] items-end justify-center px-8 pb-24">
+            <div className="relative z-10 text-center space-y-2">
+              <p className="text-sm uppercase tracking-[0.4em] text-white/70">
+                white square
+              </p>
+              <p className="text-xs text-white/60">
+                Tbilisi, Varketili III Microdistrict, III Block – Shuamta Street
+                #40
+              </p>
+              <p className="text-xs text-white/50">March 2028</p>
             </div>
           </section>
         </main>
