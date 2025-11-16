@@ -472,47 +472,46 @@ export default function Home() {
                   </li>
                 </ul>
               </div>
+            </div>
 
-              <div
-                id="fee-structure"
-                className="rounded-[2.5rem] border border-white/10 bg-emerald-400/20 p-8 text-neutral-900 shadow-[0_30px_80px_rgba(134,239,172,0.45)]"
-              >
-                <p className="text-sm uppercase tracking-[0.4em] text-neutral-900/70">
-                  Fair & transparent fees
-                </p>
-                <h3 className="mt-3 text-2xl font-semibold text-neutral-900">
-                  We win when investors win
-                </h3>
-                <ul className="mt-4 space-y-4 text-sm text-neutral-900/80">
-                  {trustSignals.map((signal) => (
-                    <li
-                      key={signal.title}
-                      className="rounded-2xl border border-neutral-900/10 bg-white/60 p-4"
-                    >
-                      <p className="text-xs uppercase tracking-[0.3em] text-neutral-700/80">
-                        {signal.title}
-                      </p>
-                      <p className="mt-2">{signal.body}</p>
-                    </li>
-                  ))}
-                  <li className="rounded-2xl border border-neutral-900/10 bg-white/60 p-4">
+            <div
+              id="fee-structure"
+              className="mt-6 rounded-[2.5rem] border border-white/10 bg-emerald-400/20 p-8 text-neutral-900 shadow-[0_30px_80px_rgba(134,239,172,0.45)] lg:col-span-2 lg:mt-0"
+            >
+              <p className="text-sm uppercase tracking-[0.4em] text-neutral-900/70">
+                Fair & transparent fees
+              </p>
+              <h3 className="mt-3 text-2xl font-semibold text-neutral-900">
+                We win when investors win
+              </h3>
+              <ul className="mt-4 space-y-4 text-sm text-neutral-900/80">
+                {trustSignals.map((signal) => (
+                  <li
+                    key={signal.title}
+                    className="rounded-2xl border border-neutral-900/10 bg-white/60 p-4"
+                  >
                     <p className="text-xs uppercase tracking-[0.3em] text-neutral-700/80">
-                      Transaction fee
+                      {signal.title}
                     </p>
-                    <p className="mt-2">
-                      Instead of bank withdrawal fees, we charge a flat 5 GEL
-                      bank transfer fee on final profit payouts to cover
-                      processing.
-                    </p>
+                    <p className="mt-2">{signal.body}</p>
                   </li>
-                </ul>
-                <button
-                  type="button"
-                  className="mt-6 inline-flex items-center justify-center rounded-full bg-neutral-900 px-5 py-2 text-sm font-semibold text-emerald-200 transition hover:bg-black"
-                >
-                  Download fee schedule
-                </button>
-              </div>
+                ))}
+                <li className="rounded-2xl border border-neutral-900/10 bg-white/60 p-4">
+                  <p className="text-xs uppercase tracking-[0.3em] text-neutral-700/80">
+                    Transaction fee
+                  </p>
+                  <p className="mt-2">
+                    Instead of bank withdrawal fees, we charge a flat 5 GEL bank
+                    transfer fee on final profit payouts to cover processing.
+                  </p>
+                </li>
+              </ul>
+              <button
+                type="button"
+                className="mt-6 inline-flex items-center justify-center rounded-full bg-neutral-900 px-5 py-2 text-sm font-semibold text-emerald-200 transition hover:bg-black"
+              >
+                Download fee schedule
+              </button>
             </div>
           </section>
         </main>
