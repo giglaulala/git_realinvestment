@@ -7,6 +7,7 @@ import {
   Trophy,
   Users,
 } from "lucide-react";
+import { CommitmentForm } from "./commitment-form";
 
 export const metadata = {
   title: "Real Investment | Current Raises",
@@ -281,42 +282,7 @@ export default function TradePage() {
               </div>
             </div>
 
-            <form className="mt-8 grid gap-6 lg:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-black/40 p-5">
-                <p className="text-xs uppercase tracking-[0.3em] text-white/40">Property SPV</p>
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="text-lg font-semibold text-white">Select raise</span>
-                  <span className="text-xs text-white/40">Codes TBI-01 · BTM-02 · …</span>
-                </div>
-                <input
-                  className="mt-4 w-full rounded-xl bg-white/5 px-4 py-3 text-base text-white/90 outline-none transition focus:bg-white/10 focus:ring-2 focus:ring-emerald-300/60"
-                  placeholder="Enter property code"
-                  type="text"
-                  pattern="^[A-Z0-9\\-]{5,}$"
-                />
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-black/40 p-5">
-                <p className="text-xs uppercase tracking-[0.3em] text-white/40">Commitment (₾)</p>
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="text-lg font-semibold text-white">Link your bank</span>
-                  <span className="text-xs text-white/40">Escrow handles settlement</span>
-                </div>
-                <input
-                  className="mt-4 w-full rounded-xl bg-white/5 px-4 py-3 text-base text-white/90 outline-none transition focus:bg-white/10 focus:ring-2 focus:ring-emerald-300/60"
-                  placeholder="₾25,000"
-                  type="number"
-                  step="100"
-                />
-              </div>
-              <div className="lg:col-span-2">
-                <button
-                  type="button"
-                  className="w-full rounded-full bg-gradient-to-r from-emerald-400 via-lime-200 to-emerald-500 px-8 py-3 text-sm font-semibold text-black shadow-[0_0_50px_rgba(134,239,172,0.5)] transition hover:scale-[1.01]"
-                >
-                  Submit commitment
-                </button>
-              </div>
-            </form>
+            <CommitmentForm opportunities={investmentOpportunities} />
 
             <div className="mt-10 grid gap-5 sm:grid-cols-2">
               <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
