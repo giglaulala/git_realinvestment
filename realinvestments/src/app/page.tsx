@@ -6,6 +6,7 @@ import { UserRound } from "lucide-react";
 
 import { useAuth } from "@/components/providers/auth-provider";
 import { AnimatedHeroHeadline } from "@/components/ui/animated-hero";
+import { HeroModelBackdrop } from "@/components/ui/hero-model";
 import { Tiles } from "@/components/ui/tiles";
 import { useLenis } from "@/components/providers/smooth-scroll";
 
@@ -244,8 +245,7 @@ export default function Home() {
         <main className="mt-20 flex flex-1 flex-col gap-16">
           <section className="relative overflow-hidden px-8 py-16">
             <div className="pointer-events-none absolute inset-0">
-              <div className="absolute left-1/2 top-[-25%] h-[48rem] w-[48rem] -translate-x-1/2 rounded-full bg-emerald-400/20 blur-[220px]" />
-              <div className="absolute left-1/2 top-[35%] h-[38rem] w-[46rem] -translate-x-1/2 -translate-y-1/2 rounded-[7rem] bg-gradient-to-br from-emerald-400/25 via-neutral-900/30 to-transparent blur-[40px]" />
+              <HeroModelBackdrop />
               <div className="absolute inset-x-12 bottom-10 flex justify-end text-xs uppercase tracking-[0.35em] text-white/45">
                 Escrow and payouts handled by licensed Georgian banks and law
                 firms.
