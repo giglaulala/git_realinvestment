@@ -42,12 +42,6 @@ export default function Home() {
     { label: "Opportunities", href: "#opportunities" },
     { label: "Fees", href: "#fee-structure" },
   ];
-  const stats = [
-    { label: "Properties funded", value: "12 SPVs" },
-    { label: "Capital returned", value: "₾18.4M" },
-    { label: "Avg hold period", value: "32 months" },
-  ];
-
   const animatedTitles = [
     "fractional ownership",
     "Georgian rental growth",
@@ -243,7 +237,7 @@ export default function Home() {
         </header>
 
         <main className="mt-20 flex flex-1 flex-col gap-16">
-          <section className="relative px-8 py-16">
+          <section className="relative min-h-[104vh] px-8 py-20 sm:min-h-[108vh] sm:py-28 lg:py-36">
             <div className="pointer-events-none absolute inset-0">
               <HeroModelBackdrop />
               <div className="absolute inset-x-12 bottom-10 flex justify-end text-xs uppercase tracking-[0.35em] text-white/45">
@@ -252,15 +246,8 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-12">
-              <div className="space-y-8">
-                <div className="flex justify-center">
-                  <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/30 bg-white/5 px-4 py-1 text-xs uppercase tracking-[0.45em] text-emerald-200/90">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
-                    Georgian fractional real estate
-                  </div>
-                </div>
-
+            <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col pb-2">
+              <div className="flex flex-1 items-center justify-center">
                 <div className="space-y-6 text-center">
                   <h1 className="text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
                     <span className="block">
@@ -272,49 +259,7 @@ export default function Home() {
                       wordClassName="bg-gradient-to-r from-emerald-200 via-lime-200 to-emerald-400 bg-clip-text text-transparent"
                     />
                   </h1>
-                  <p className="mx-auto max-w-2xl text-base leading-relaxed text-white/70 sm:text-lg">
-                    We identify high-growth Georgian apartments, wrap each one
-                    in its own SPV, and open a one-week escrow-backed raise.
-                    Your capital stays in a neutral account until the target is
-                    met—then flows straight into the property.
-                  </p>
                 </div>
-
-                <div className="flex flex-wrap items-center justify-center gap-4">
-                  <Link
-                    href="/trade"
-                    className="inline-flex items-center justify-center rounded-full bg-emerald-400/90 px-6 py-2.5 text-sm font-semibold text-black shadow-[0_0_40px_rgba(134,239,172,0.5)] transition hover:bg-emerald-300"
-                  >
-                    View current raises
-                  </Link>
-                  <Link
-                    href="#how-it-works"
-                    scroll={false}
-                    onClick={(event) =>
-                      handleSmoothScroll(event, "#how-it-works")
-                    }
-                    className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-2.5 text-sm font-semibold text-white/80 transition hover:border-white/50 hover:text-white"
-                  >
-                    See how it works
-                    <span className="h-2 w-2 rounded-full bg-emerald-300" />
-                  </Link>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-                {stats.map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="rounded-3xl border border-white/10 bg-white/5 p-5 text-center shadow-[0_20px_60px_rgba(15,185,128,0.08)]"
-                  >
-                    <p className="text-2xl font-semibold tracking-tight text-white">
-                      {stat.value}
-                    </p>
-                    <p className="mt-1 text-xs uppercase tracking-[0.25em] text-white/50">
-                      {stat.label}
-                    </p>
-                  </div>
-                ))}
               </div>
             </div>
           </section>
