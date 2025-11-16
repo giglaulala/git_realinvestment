@@ -142,9 +142,9 @@ export default function ProfilePage() {
               </ul>
             </div>
 
-            <div className="rounded-[2.2rem] border border-emerald-200/40 bg-emerald-400/18 p-6 text-neutral-900 shadow-[0_30px_80px_rgba(134,239,172,0.4)]">
-              <h3 className="text-lg font-semibold text-neutral-900">Need to update compliance?</h3>
-              <p className="mt-2 text-sm text-neutral-900/80">
+            <div className="rounded-[2.2rem] border border-emerald-200/40 bg-emerald-400/18 p-6 text-white shadow-[0_30px_80px_rgba(134,239,172,0.4)]">
+              <h3 className="text-lg font-semibold text-white">Need to update compliance?</h3>
+              <p className="mt-2 text-sm text-white/80">
                 Add a new Georgian bank account, refresh your KYC documents, or appoint a proxy investor. Our compliance team responds within one business day.
               </p>
               <Link

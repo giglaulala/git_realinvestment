@@ -1,4 +1,12 @@
 import Link from "next/link";
+import {
+  ArrowUpRight,
+  Layers,
+  TrendingDown,
+  TrendingUp,
+  Trophy,
+  Users,
+} from "lucide-react";
 
 export const metadata = {
   title: "Real Investment | Current Raises",
@@ -6,19 +14,24 @@ export const metadata = {
     "Commit capital to Georgian real estate SPVs, monitor escrow progress, and stay informed on raise updates in one place.",
 };
 
-const activeRaises = [
-  { code: "TBI-01", name: "Vake Vista", target: "₾2.4M", funded: "78%", closing: "Closes in 3 days" },
-  { code: "BTM-02", name: "Seaside Residences", target: "₾1.9M", funded: "52%", closing: "Closes in 5 days" },
-  { code: "KTS-03", name: "Riverside Lofts", target: "₾1.1M", funded: "34%", closing: "Closes in 6 days" },
-  { code: "TBI-04", name: "Old Town Revival", target: "₾3.2M", funded: "New", closing: "Opened today" },
-];
+type InvestmentStat = {
+  label: string;
+  value: string;
+};
 
-const recentCommitments = [
-  { property: "TBI-01", investor: "M. Dvalishvili", amount: "₾35,000", ownership: "1.5%", time: "16:21" },
-  { property: "BTM-02", investor: "S. Gelashvili", amount: "₾18,000", ownership: "0.9%", time: "15:58" },
-  { property: "TBI-04", investor: "G. Natelashvili", amount: "₾52,000", ownership: "1.6%", time: "15:42" },
-  { property: "KTS-03", investor: "A. Chikovani", amount: "₾9,500", ownership: "0.7%", time: "15:37" },
-];
+type InvestmentOpportunity = {
+  code: string;
+  name: string;
+  location: string;
+  status: string;
+  pricePerShare: string;
+  priceChange: string;
+  avgPrice: string;
+  winnings: string;
+  investors: number;
+  availableShares: string;
+  stats: InvestmentStat[];
+};
 
 const roundUpdates = [
   {
@@ -30,6 +43,199 @@ const roundUpdates = [
     body: "Two investors requested early-exit slots for BTM-02. Bulletin board opening once compliance approval clears.",
   },
 ];
+
+const investmentOpportunities: InvestmentOpportunity[] = [
+  {
+    code: "TBI-01",
+    name: "Vake Vista",
+    location: "Tbilisi · Vake district",
+    status: "78% funded · Closes in 3 days",
+    pricePerShare: "₾1,150",
+    priceChange: "+6.4%",
+    avgPrice: "₾1,085",
+    winnings: "₾420k",
+    investors: 286,
+    availableShares: "44 shares remaining",
+    stats: [
+      { label: "Projected IRR", value: "16%" },
+      { label: "Gross yield", value: "6.8%" },
+      { label: "Occupancy", value: "92% leased" },
+    ],
+  },
+  {
+    code: "BTM-02",
+    name: "Seaside Residences",
+    location: "Batumi · New Boulevard",
+    status: "52% funded · Closes in 5 days",
+    pricePerShare: "₾920",
+    priceChange: "-1.4%",
+    avgPrice: "₾950",
+    winnings: "₾310k",
+    investors: 198,
+    availableShares: "96 shares remaining",
+    stats: [
+      { label: "Projected IRR", value: "14%" },
+      { label: "Gross yield", value: "6.1%" },
+      { label: "Occupancy", value: "88% pre-leased" },
+    ],
+  },
+  {
+    code: "KTS-03",
+    name: "Riverside Lofts",
+    location: "Kutaisi · Riverfront",
+    status: "34% funded · Closes in 6 days",
+    pricePerShare: "₾640",
+    priceChange: "+4.8%",
+    avgPrice: "₾612",
+    winnings: "₾185k",
+    investors: 143,
+    availableShares: "132 shares remaining",
+    stats: [
+      { label: "Projected IRR", value: "12%" },
+      { label: "Gross yield", value: "5.9%" },
+      { label: "Occupancy", value: "82% presold" },
+    ],
+  },
+  {
+    code: "TBI-04",
+    name: "Old Town Revival",
+    location: "Tbilisi · Sololaki",
+    status: "New raise · Opened today",
+    pricePerShare: "₾1,320",
+    priceChange: "+7.5%",
+    avgPrice: "₾1,250",
+    winnings: "₾265k",
+    investors: 164,
+    availableShares: "210 shares available",
+    stats: [
+      { label: "Projected IRR", value: "18%" },
+      { label: "Gross yield", value: "7.2%" },
+      { label: "Restoration", value: "Phase 2 permits" },
+    ],
+  },
+];
+
+function InvestmentOpportunityCard({
+  opportunity,
+  className,
+}: {
+  opportunity: InvestmentOpportunity;
+  className?: string;
+}) {
+  const changePositive = opportunity.priceChange.startsWith("+");
+
+  return (
+    <article
+      className={`group relative overflow-hidden rounded-[2rem] border border-white/10 bg-linear-to-br from-white/10 via-neutral-900/80 to-neutral-900/95 p-6 shadow-[0_20px_60px_rgba(15,118,110,0.25)] transition duration-300 hover:border-emerald-300/50 hover:shadow-[0_30px_80px_rgba(134,239,172,0.35)] ${className ?? ""}`}
+    >
+      <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-emerald-400/10 blur-[160px] transition group-hover:scale-125" />
+      <div className="absolute -left-24 bottom-0 h-48 w-48 rounded-full bg-lime-300/10 blur-[160px] transition group-hover:scale-110" />
+      <div className="relative z-10 flex flex-col gap-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <p className="text-xs uppercase tracking-[0.35em] text-white/40">
+              {opportunity.code}
+            </p>
+            <h3 className="text-xl font-semibold text-white sm:text-2xl">
+              {opportunity.name}
+            </h3>
+            <p className="text-sm text-white/60">{opportunity.location}</p>
+          </div>
+          <span className="inline-flex items-center rounded-full border border-white/15 bg-black/40 px-4 py-2 text-xs font-medium uppercase tracking-[0.25em] text-white/60">
+            {opportunity.status}
+          </span>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+            <p className="text-[0.65rem] uppercase tracking-[0.3em] text-white/45">
+              Price per share
+            </p>
+            <p className="mt-2 text-lg font-semibold text-white">
+              {opportunity.pricePerShare}
+            </p>
+            <p className="mt-1 text-xs text-white/50">
+              Avg. {opportunity.avgPrice} last 30 days
+            </p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+            <p className="text-[0.65rem] uppercase tracking-[0.3em] text-white/45">
+              Price movement
+            </p>
+            <div className="mt-2 flex items-center gap-2">
+              {changePositive ? (
+                <TrendingUp className="h-4 w-4 text-emerald-300" aria-hidden="true" />
+              ) : (
+                <TrendingDown className="h-4 w-4 text-rose-300" aria-hidden="true" />
+              )}
+              <p
+                className={`text-lg font-semibold ${
+                  changePositive ? "text-emerald-300" : "text-rose-300"
+                }`}
+              >
+                {opportunity.priceChange}
+              </p>
+            </div>
+            <p className="mt-1 text-xs text-white/50">vs. previous 30 days</p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+            <p className="text-[0.65rem] uppercase tracking-[0.3em] text-white/45">
+              Payouts to date
+            </p>
+            <div className="mt-2 flex items-center gap-2">
+              <Trophy className="h-4 w-4 text-amber-300" aria-hidden="true" />
+              <p className="text-lg font-semibold text-white">
+                {opportunity.winnings}
+              </p>
+            </div>
+            <p className="mt-1 text-xs text-white/50">Total investor winnings</p>
+          </div>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-3">
+          {opportunity.stats.map((stat) => (
+            <div
+              key={`${opportunity.code}-${stat.label}`}
+              className="rounded-xl border border-white/10 bg-black/25 p-3"
+            >
+              <p className="text-[0.65rem] uppercase tracking-[0.3em] text-white/45">
+                {stat.label}
+              </p>
+              <p className="mt-2 text-sm font-semibold text-white">
+                {stat.value}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap gap-3 text-sm">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/40 px-4 py-2">
+              <Users className="h-4 w-4 text-emerald-200" aria-hidden="true" />
+              <span className="font-semibold text-white">
+                {opportunity.investors.toLocaleString("en-US")}
+              </span>
+              <span className="text-white/60">investors</span>
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/40 px-4 py-2">
+              <Layers className="h-4 w-4 text-emerald-200" aria-hidden="true" />
+              <span className="font-semibold text-white">
+                {opportunity.availableShares}
+              </span>
+            </span>
+          </div>
+          <Link
+            href={{ pathname: "/trade", query: { raise: opportunity.code } }}
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-xs font-medium uppercase tracking-[0.3em] text-white/80 transition hover:border-emerald-300/60 hover:text-emerald-200"
+          >
+            Review data room
+            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
+      </div>
+    </article>
+  );
+}
 
 export default function TradePage() {
   return (
@@ -60,8 +266,8 @@ export default function TradePage() {
           </Link>
         </header>
 
-        <section className="grid gap-8 lg:grid-cols-[1.2fr_0.9fr]">
-          <div className="rounded-[2.5rem] border border-white/15 bg-white/5 p-8 backdrop-blur">
+        <section className="grid items-start gap-8 lg:grid-cols-[max-content_minmax(0,1fr)]">
+          <div className="w-full max-w-2xl rounded-[2.5rem] border border-white/15 bg-white/5 p-8 backdrop-blur lg:justify-self-start">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h2 className="text-2xl font-semibold">Commit to a property raise</h2>
@@ -128,80 +334,19 @@ export default function TradePage() {
                 </p>
               </div>
             </div>
-          </div>
 
-          <aside className="flex flex-col gap-6">
-            <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Active raises</h3>
-                <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.25em] text-white/50">
-                  Targets
-                </span>
-              </div>
-              <ul className="mt-4 space-y-3">
-                {activeRaises.map((raise) => (
-                  <li
-                    key={raise.code}
-                    className="flex items-center justify-between rounded-xl border border-white/10 bg-black/40 px-4 py-3"
-                  >
-                    <div>
-                      <p className="text-sm font-semibold text-white">
-                        {raise.name}
-                      </p>
-                      <p className="text-[0.7rem] text-white/50">
-                        {raise.code} • Target {raise.target}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-semibold text-emerald-300">{raise.funded}</p>
-                      <p className="text-[0.7rem] text-white/50">{raise.closing}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Recent commitments</h3>
-                <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.25em] text-white/50">
-                  Live
-                </span>
-              </div>
-              <ul className="mt-4 space-y-3">
-                {recentCommitments.map((commitment) => (
-                  <li
-                    key={`${commitment.property}-${commitment.time}`}
-                    className="flex items-center justify-between rounded-xl border border-white/10 bg-black/40 px-4 py-3"
-                  >
-                    <div>
-                      <p className="text-sm font-semibold text-white">
-                        {commitment.property} • {commitment.investor}
-                      </p>
-                      <p className="text-[0.7rem] text-white/50">
-                        {commitment.amount} • {commitment.time}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-semibold text-emerald-300">
-                        {commitment.ownership}
-                      </p>
-                      <p className="text-xs text-white/70">Ownership</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="rounded-[2rem] border border-emerald-200/40 bg-emerald-400/15 p-6 text-neutral-900 shadow-[0_30px_80px_rgba(134,239,172,0.4)]">
-              <h3 className="text-lg font-semibold text-neutral-900">Round updates</h3>
-              <ul className="mt-4 space-y-4">
+            <div className="mt-6 w-full rounded-[2rem] border border-emerald-200/40 bg-emerald-400/15 p-6 text-white shadow-[0_30px_80px_rgba(134,239,172,0.4)]">
+              <h3 className="text-lg font-semibold text-white">Round updates</h3>
+              <ul className="mt-4 space-y-4 text-sm text-white/80">
                 {roundUpdates.map((update) => (
-                  <li key={update.title} className="rounded-xl border border-white/40 bg-white/50 p-4">
-                    <p className="text-xs uppercase tracking-[0.3em] text-neutral-700/80">
+                  <li
+                    key={update.title}
+                    className="w-full rounded-xl border border-white/40 bg-white/10 p-4"
+                  >
+                    <p className="text-xs uppercase tracking-[0.3em] text-white/70">
                       {update.title}
                     </p>
-                    <p className="mt-2 text-sm text-neutral-800">{update.body}</p>
+                    <p className="mt-2 text-sm text-white/80">{update.body}</p>
                   </li>
                 ))}
               </ul>
@@ -212,6 +357,15 @@ export default function TradePage() {
                 Review my positions
               </Link>
             </div>
+          </div>
+
+          <aside className="flex flex-col gap-6">
+            {investmentOpportunities.slice(0, 2).map((opportunity) => (
+              <InvestmentOpportunityCard
+                key={`${opportunity.code}-summary`}
+                opportunity={opportunity}
+              />
+            ))}
           </aside>
         </section>
       </div>

@@ -312,9 +312,9 @@ export function LoginContent() {
               </ul>
             </div>
 
-            <div className="rounded-[2.2rem] border border-emerald-200/40 bg-emerald-400/15 p-6 text-neutral-900 shadow-[0_30px_80px_rgba(134,239,172,0.4)]">
-              <h2 className="text-lg font-semibold text-neutral-900">Need elevated access?</h2>
-              <p className="mt-2 text-sm text-neutral-900/80">
+            <div className="rounded-[2.2rem] border border-emerald-200/40 bg-emerald-400/15 p-6 text-white shadow-[0_30px_80px_rgba(134,239,172,0.4)]">
+              <h2 className="text-lg font-semibold text-white">Need elevated access?</h2>
+              <p className="mt-2 text-sm text-white/80">
                 Add a co-investor, request Transfer Board permissions, or update escrow-authorised signatories from the compliance console.
               </p>
               <Link
