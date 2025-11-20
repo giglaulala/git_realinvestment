@@ -1,117 +1,117 @@
-'use client';
+"use client"
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { UploadCloud, UserCheck } from "lucide-react";
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { UploadCloud, UserCheck } from "lucide-react"
 
-import { useAuth } from "@/components/providers/auth-provider";
+import { useAuth } from "@/components/providers/auth-provider"
 
-type ViewMode = "login" | "signup";
+type ViewMode = "login" | "signup"
 
 type AuthFormState = {
-  name: string;
-  email: string;
-  password: string;
-  nationalIdFile?: File;
-};
+  name: string
+  email: string
+  password: string
+  nationalIdFile?: File
+}
 
 const DEFAULT_STATE: AuthFormState = {
   name: "",
   email: "",
   password: "",
   nationalIdFile: undefined,
-};
+}
 
 export function LoginContent() {
-  const { isAuthenticated, user, login, logout } = useAuth();
-  const router = useRouter();
-  const [mode, setMode] = useState<ViewMode>("login");
-  const [formState, setFormState] = useState<AuthFormState>(DEFAULT_STATE);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
+  const { isAuthenticated, user, login, logout } = useAuth()
+  const router = useRouter()
+  const [mode, setMode] = useState<ViewMode>("login")
+  const [formState, setFormState] = useState<AuthFormState>(DEFAULT_STATE)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined)
 
-  const isSignup = mode === "signup";
+  const isSignup = mode === "signup"
 
   const title = isSignup
     ? "Create your investor account"
-    : "Sign in to Real Investment";
+    : "Sign in to Real Investment"
   const subtitle = isSignup
     ? "Complete onboarding to access escrow-backed property raises and your dashboard."
-    : "Log in with your email and password to review SPV holdings and payouts.";
+    : "Log in with your email and password to review SPV holdings and payouts."
 
   const toggleMode = useCallback(() => {
-    setMode((current) => (current === "login" ? "signup" : "login"));
-    setFormState(DEFAULT_STATE);
-    setPreviewUrl(undefined);
-  }, []);
+    setMode((current) => (current === "login" ? "signup" : "login"))
+    setFormState(DEFAULT_STATE)
+    setPreviewUrl(undefined)
+  }, [])
 
   const handleChange = useCallback(
     (key: keyof AuthFormState, value: string | File | undefined) => {
       setFormState((previous) => ({
         ...previous,
         [key]: value,
-      }));
+      }))
     },
     []
-  );
+  )
 
   const handleFileChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      handleChange("nationalIdFile", file);
+      const file = event.target.files?.[0]
+      handleChange("nationalIdFile", file)
 
       if (file) {
-        const objectUrl = URL.createObjectURL(file);
+        const objectUrl = URL.createObjectURL(file)
         setPreviewUrl((current) => {
           if (current) {
-            URL.revokeObjectURL(current);
+            URL.revokeObjectURL(current)
           }
-          return objectUrl;
-        });
+          return objectUrl
+        })
       } else if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-        setPreviewUrl(undefined);
+        URL.revokeObjectURL(previewUrl)
+        setPreviewUrl(undefined)
       }
     },
     [handleChange, previewUrl]
-  );
+  )
 
   const hasValidSignup =
     formState.name.trim().length > 1 &&
     formState.email.trim().length > 5 &&
     formState.password.trim().length >= 8 &&
-    !!formState.nationalIdFile;
+    !!formState.nationalIdFile
 
   const hasValidLogin =
-    formState.email.trim().length > 5 && formState.password.trim().length >= 8;
+    formState.email.trim().length > 5 && formState.password.trim().length >= 8
 
-  const isFormValid = isSignup ? hasValidSignup : hasValidLogin;
+  const isFormValid = isSignup ? hasValidSignup : hasValidLogin
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
+      event.preventDefault()
       if (!isFormValid) {
-        return;
+        return
       }
 
-      setIsSubmitting(true);
+      setIsSubmitting(true)
       try {
         await login({
           name: isSignup ? formState.name : undefined,
           email: formState.email,
           password: formState.password,
           nationalIdFile: isSignup ? formState.nationalIdFile : undefined,
-        });
+        })
       } finally {
-        setIsSubmitting(false);
+        setIsSubmitting(false)
       }
     },
     [formState, isFormValid, isSignup, login]
-  );
+  )
 
   const authSummary = useMemo(() => {
-    if (!user) return null;
+    if (!user) return null
     return {
       initials: user.name
         .split(" ")
@@ -122,14 +122,14 @@ export function LoginContent() {
       name: user.name,
       email: user.email,
       nationalIdUrl: user.nationalIdUrl,
-    };
-  }, [user]);
+    }
+  }, [user])
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.replace("/dashboard");
+      router.replace("/dashboard")
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, router])
 
   return (
     <div className="relative min-h-screen bg-neutral-950 px-6 pb-24 pt-16 text-white sm:px-10 lg:px-16">
@@ -229,7 +229,9 @@ export function LoginContent() {
                 placeholder="••••••••"
                 required
                 value={formState.password}
-                onChange={(event) => handleChange("password", event.target.value)}
+                onChange={(event) =>
+                  handleChange("password", event.target.value)
+                }
                 className="mt-4 w-full rounded-2xl border border-white/15 bg-black/40 px-5 py-4 text-base text-white transition placeholder:text-white/30 focus:border-emerald-300/60 focus:outline-none focus:ring-2 focus:ring-emerald-300/40"
               />
             </div>
@@ -277,7 +279,7 @@ export function LoginContent() {
             <button
               type="submit"
               disabled={!isFormValid || isSubmitting}
-              className="mt-8 flex w-full items-center justify-center rounded-full bg-gradient-to-r from-emerald-400 via-lime-200 to-emerald-500 px-8 py-3 text-sm font-semibold text-black shadow-[0_0_45px_rgba(134,239,172,0.48)] transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
+              className="mt-8 flex w-full items-center justify-center rounded-full bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500 px-8 py-3 text-sm font-semibold text-black shadow-[0_0_45px_rgba(134,239,172,0.48)] transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
             >
               {isSubmitting
                 ? "Processing..."
@@ -295,34 +297,29 @@ export function LoginContent() {
 
           <aside className="flex flex-col gap-6">
             <div className="rounded-[2.2rem] border border-white/12 bg-white/6 p-6 backdrop-blur">
-              <h2 className="text-lg font-semibold text-white">Security envelope</h2>
+              <h2 className="text-lg font-semibold text-white">
+                Security envelope
+              </h2>
               <ul className="mt-4 space-y-3 text-sm text-white/70">
                 <li className="flex items-start gap-3">
                   <span className="mt-1 h-1.5 w-6 rounded-full bg-emerald-300/70" />
-                  <span>Mandatory Georgian ID verification before escrow access</span>
+                  <span>
+                    Mandatory Georgian ID verification before escrow access
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="mt-1 h-1.5 w-6 rounded-full bg-emerald-300/70" />
-                  <span>Linked personal bank accounts for payouts and refunds</span>
+                  <span>
+                    Linked personal bank accounts for payouts and refunds
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="mt-1 h-1.5 w-6 rounded-full bg-emerald-300/70" />
-                  <span>Sessions auto-expire after 15 minutes of inactivity</span>
+                  <span>
+                    Sessions auto-expire after 15 minutes of inactivity
+                  </span>
                 </li>
               </ul>
-            </div>
-
-            <div className="rounded-[2.2rem] border border-emerald-200/40 bg-emerald-400/15 p-6 text-white shadow-[0_30px_80px_rgba(134,239,172,0.4)]">
-              <h2 className="text-lg font-semibold text-white">Need elevated access?</h2>
-              <p className="mt-2 text-sm text-white/80">
-                Add a co-investor, request Transfer Board permissions, or update escrow-authorised signatories from the compliance console.
-              </p>
-              <Link
-                href="/portfolio"
-                className="mt-5 inline-flex items-center justify-center rounded-full bg-neutral-900 px-5 py-2 text-sm font-semibold text-emerald-200 transition hover:bg-black"
-              >
-                Contact compliance
-              </Link>
             </div>
 
             {isAuthenticated && authSummary && (
@@ -364,6 +361,5 @@ export function LoginContent() {
         </section>
       </div>
     </div>
-  );
+  )
 }
-
