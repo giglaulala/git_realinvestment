@@ -1,21 +1,21 @@
-"use client";
+"use client"
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { FeatureCard } from "./FeatureCard";
+import { useRef } from "react"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { FeatureCard } from "./FeatureCard"
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger)
 
 export function HowItWorks() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null)
+  const titleRef = useRef<HTMLHeadingElement>(null)
 
-  const card1Ref = useRef<HTMLElement>(null);
-  const card2Ref = useRef<HTMLElement>(null);
-  const card3Ref = useRef<HTMLElement>(null);
-  const cardsContainerRef = useRef<HTMLDivElement>(null);
+  const card1Ref = useRef<HTMLElement>(null)
+  const card2Ref = useRef<HTMLElement>(null)
+  const card3Ref = useRef<HTMLElement>(null)
+  const cardsContainerRef = useRef<HTMLDivElement>(null)
 
   const featureCards = [
     {
@@ -48,69 +48,82 @@ export function HowItWorks() {
         "Automatic refunds if targets miss",
       ],
     },
-  ];
+  ]
 
   useGSAP(
     () => {
-      if (!titleRef.current) return;
+      if (!titleRef.current) return
 
-      const heading = containerRef.current?.querySelector('.main-heading') as HTMLElement;
-      const paragraph = containerRef.current?.querySelector('.main-paragraph') as HTMLElement;
-      if (!heading || !paragraph) return;
+      const heading = containerRef.current?.querySelector(
+        ".main-heading"
+      ) as HTMLElement
+      const headingLines = Array.from(
+        heading?.querySelectorAll(".heading-line") ?? []
+      ) as HTMLElement[]
+      if (!heading || headingLines.length < 2) return
 
-      // Set initial states - position elements at center first, then move them offscreen
-      gsap.set(titleRef.current, { 
-        left: "50%", 
-        top: "50%", 
-        x: "-50%", 
-        y: "100vh", 
-        opacity: 0 
-      });
-      
-      gsap.set(heading, { 
-        left: "50%", 
-        top: "50%", 
-        x: "-50%", 
-        y: "100vh", 
-        opacity: 0 
-      });
-      
-      gsap.set(paragraph, { 
-        left: "50%", 
-        top: "50%", 
-        x: "-50%", 
-        y: "100vh", 
-        opacity: 0, 
-        lineHeight: "3em" 
-      });
-      
+      // Set initial states - keep hero elements centered to set up the rift effect
+      gsap.set(titleRef.current, {
+        left: "50%",
+        top: "50%",
+        x: "-50%",
+        y: "100vh",
+        opacity: 0,
+      })
 
-      
-      // Set initial states for cards - all centered with different rotations
-      if (card1Ref.current && card2Ref.current && card3Ref.current) {
-        gsap.set([card1Ref.current, card2Ref.current, card3Ref.current], {
+      gsap.set(heading, {
+        left: "50%",
+        top: "50%",
+        x: "-50%",
+        y: "100vh",
+        opacity: 0,
+        scale: 0.9,
+        lineHeight: "1em",
+        transformOrigin: "50% 50%",
+      })
+
+      const cards = [
+        card1Ref.current,
+        card2Ref.current,
+        card3Ref.current,
+      ].filter(Boolean) as HTMLElement[]
+
+      if (cards.length) {
+        gsap.set(cards, {
           left: "50%",
           top: "50%",
-          x: "-50%",
-          y: "100vh",
+          xPercent: -50,
+          yPercent: -50,
+          x: 0,
+          y: 0,
           opacity: 0,
-        });
-        gsap.set(card1Ref.current, { rotation: -8 });
-        gsap.set(card2Ref.current, { rotation: 3 });
-        gsap.set(card3Ref.current, { rotation: -5 });
+          scale: 0.85,
+        })
+
+        gsap.set(card1Ref.current, { rotation: -8 })
+        gsap.set(card2Ref.current, { rotation: 4 })
+        gsap.set(card3Ref.current, { rotation: -5 })
+      }
+
+      if (cardsContainerRef.current) {
+        gsap.set(cardsContainerRef.current, {
+          clipPath: "inset(50% 45% 50% 45%)",
+          opacity: 0,
+          filter: "drop-shadow(0 0 20px rgba(255,255,255,0.25))",
+        })
       }
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "+=600%", // Extended for more animation sequences
+          end: "+=450%",
           pin: true,
           scrub: 1,
           anticipatePin: 1,
           pinSpacing: true,
         },
-      });
+      })
 
       // Sequence 1: "What we offer" comes up from below to center
       tl.to(titleRef.current, {
@@ -133,105 +146,155 @@ export function HowItWorks() {
           duration: 1.5,
           ease: "power2.in",
         })
-        // Sequence 4: "Three guardrails..." comes up from below (BIG)
+        // Sequence 4: "Three guardrails..." rises and locks to center
         .to(heading, {
-          y: "-50%", // Center it
+          y: "-50%",
           opacity: 1,
-          duration: 2,
+          duration: 2.2,
           ease: "power2.out",
         })
-        // Sequence 5: Hold it briefly
-        .to(heading, {
-          duration: 0.5,
-        })
-        // Sequence 6: Heading shrinks and moves to top-left
-        .to(heading, {
-          fontSize: "2.5rem",
-          top: "10%",
-          left: "8%",
-          x: 0, // Clear transform
-          y: 0, // Clear transform
-          duration: 2,
-          ease: "power2.inOut",
-        })
-        // Sequence 7: Hold before paragraph appears
-        .to(heading, {
-          duration: 0.5,
-        })
-        // Sequence 8: Paragraph comes up with large line-height, aligned with heading
-        .to(paragraph, {
-          top: "35vh",
-          left: "8%",
-          x: 0, // Clear transform
-          y: 0, // Clear transform
-          opacity: 1,
-          duration: 2,
+        // Sequence 5: Lines separate to form the rift
+        .addLabel("schism")
+        .to(
+          headingLines[0],
+          {
+            yPercent: -65,
+            duration: 1.4,
+            ease: "power3.inOut",
+          },
+          "schism"
+        )
+        .to(
+          headingLines[1],
+          {
+            yPercent: 65,
+            duration: 1.4,
+            ease: "power3.inOut",
+          },
+          "schism"
+        )
+        .to(
+          heading,
+          {
+            scale: 1.2,
+            letterSpacing: "-0.01em",
+            duration: 1.2,
+            ease: "power2.inOut",
+          },
+          "schism"
+        )
+        .to(
+          cardsContainerRef.current,
+          {
+            opacity: 1,
+            clipPath: "inset(35% 30% 35% 30%)",
+            duration: 1.2,
+            ease: "power2.inOut",
+          },
+          "schism+=0.2"
+        )
+        // Sequence 6: Cards burst through stacked in the center
+        .fromTo(
+          cards,
+          {
+            yPercent: 30,
+            scale: 0.85,
+            opacity: 0,
+          },
+          {
+            yPercent: -50,
+            scale: 1,
+            opacity: 1,
+            stagger: 0.15,
+            duration: 1.1,
+            ease: "power3.out",
+          },
+          "schism+=0.4"
+        )
+        // Sequence 7: Heading lines continue splitting and exit while cards emerge
+        .to(
+          headingLines[0],
+          {
+            yPercent: -220,
+            opacity: 0,
+            duration: 1,
+            ease: "power2.in",
+          },
+          "schism+=0.7"
+        )
+        .to(
+          headingLines[1],
+          {
+            yPercent: 220,
+            opacity: 0,
+            duration: 1,
+            ease: "power2.in",
+          },
+          "schism+=0.7"
+        )
+        .to(
+          heading,
+          {
+            opacity: 0,
+            duration: 0.8,
+            ease: "power2.in",
+          },
+          "schism+=0.9"
+        )
+        // Sequence 8: Rift fully opens to reveal cards
+        .to(cardsContainerRef.current, {
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: 1,
           ease: "power2.out",
         })
-        // Sequence 9: Compress line-height to normal and move UP closer to heading
-        .to(paragraph, {
-          lineHeight: "1.6em",
-          top: "25vh",
-          duration: 2,
-          ease: "power2.inOut",
-        })
-        // Sequence 10: Hold the final state briefly
-        .to(paragraph, {
+        // Sequence 9: Cards spread out horizontally
+        .addLabel("spread")
+        .to(
+          card1Ref.current,
+          {
+            left: "50%",
+            x: -420,
+            rotation: 0,
+            duration: 1.3,
+            ease: "power3.inOut",
+          },
+          "spread"
+        )
+        .to(
+          card2Ref.current,
+          {
+            left: "50%",
+            x: 0,
+            rotation: 0,
+            duration: 1.3,
+            ease: "power3.inOut",
+          },
+          "spread"
+        )
+        .to(
+          card3Ref.current,
+          {
+            left: "50%",
+            x: 420,
+            rotation: 0,
+            duration: 1.3,
+            ease: "power3.inOut",
+          },
+          "spread"
+        )
+        // Sequence 10: Hold final tableau with cards only
+        .to([card1Ref.current, card2Ref.current, card3Ref.current], {
           duration: 1,
         })
-        // Sequence 11: Scroll heading and paragraph up and out of view
-        .to([heading, paragraph], {
-          y: "-100vh",
-          opacity: 0,
-          duration: 2,
-          ease: "power2.inOut",
-        })
-        // Sequence 12: Cards enter from bottom, stacked on top of each other with rotations
-        .to([card1Ref.current, card2Ref.current, card3Ref.current], {
-          y: "-50%", // Center them
-          opacity: 1,
-          duration: 2,
-          ease: "power2.out",
-        })
-        // Sequence 13: Hold cards stacked briefly
-        .to([card1Ref.current, card2Ref.current, card3Ref.current], {
-          duration: 0.5,
-        })
-        // Sequence 14: Spread cards out evenly and zero their rotations
-        .to(card1Ref.current, {
-          left: "50%",
-          x: -550, // Move left from center (half card width + gap)
-          rotation: 0,
-          opacity: 1,
-          duration: 2.5,
-          ease: "power2.inOut",
-        }, "spread")
-        .to(card2Ref.current, {
-          left: "50%",
-          x: -175, // Center (half of card width)
-          rotation: 0,
-          opacity: 1,
-          duration: 2.5,
-          ease: "power2.inOut",
-        }, "spread")
-        .to(card3Ref.current, {
-          left: "50%",
-          x: 200, // Move right from center (half card width + gap)
-          rotation: 0,
-          opacity: 1,
-          duration: 2.5,
-          ease: "power2.inOut",
-        }, "spread")
-        // Sequence 15: Hold final state
-        .to([card1Ref.current, card2Ref.current, card3Ref.current], {
-          duration: 1,
-        });
     },
     { scope: containerRef }
-  );
+  )
 
   return (
-    <div ref={containerRef} className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-[#0a0a0a]">
+    <div
+      ref={containerRef}
+      className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-[#0a0a0a]"
+    >
       {/* Full-Screen Title Container */}
       <div className="absolute inset-0 flex items-center justify-center z-10">
         <h2
@@ -243,17 +306,13 @@ export function HowItWorks() {
       </div>
 
       {/* Main Heading - "Three guardrails..." */}
-      <h3 className="main-heading absolute text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight text-left px-8 max-w-4xl z-10">
-        Three guardrails before a single lari moves
+      <h3 className="main-heading absolute text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight text-center px-8 max-w-5xl z-10 leading-tight">
+        <span className="heading-line block">Three guardrails</span>
+        <span className="heading-line block">before a single lari moves</span>
       </h3>
 
-      {/* Main Paragraph */}
-      <p className="main-paragraph absolute text-xl sm:text-2xl md:text-3xl text-white/90 text-left px-8 max-w-4xl z-10">
-        Each apartment is locked to its own Georgian SPV, investors pass national ID verification, and contributions flow directly into escrow until the raise succeeds. If the goal isn&apos;t met, the bank reverses funds back to every investor automatically.
-      </p>
-
       {/* Feature Cards Container - for animation */}
-      <div 
+      <div
         ref={cardsContainerRef}
         className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
       >
@@ -276,8 +335,6 @@ export function HowItWorks() {
           points={featureCards[2].points}
         />
       </div>
-
-
     </div>
-  );
+  )
 }
