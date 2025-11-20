@@ -20,7 +20,8 @@ export function AlternativeHero() {
       
       if (!letters1 || !letters2 || !greenBgRef.current) return;
 
-      // Initial state for text 2
+      // Initial states
+      gsap.set(text1Ref.current, { opacity: 1 });
       gsap.set(text2Ref.current, { x: "100vw", opacity: 1 });
 
       const tl = gsap.timeline({
@@ -61,27 +62,16 @@ export function AlternativeHero() {
         },
         "-=0.2" // Slight overlap
       )
-        // Animate Text 2 (Scale, Move Up)
+        // Hold text2 in place for a moment
         .to(
           text2Ref.current,
           {
-            scale: 0.2,
-            y: -200,
-            duration: 1,
+            x: "0%",
+            duration: 1.5, // Hold duration
           },
           ">"
         )
-        // Slide green background to the left (revealing black underneath)
-        .to(
-          greenBgRef.current,
-          {
-            x: "-100%",
-            duration: 1.5,
-            ease: "power2.inOut",
-          },
-          "<+=0.2" // Start slightly after text starts moving
-        )
-        // Exit to left
+        // Exit to left (no scale or y movement)
         .to(
           text2Ref.current,
           {
@@ -91,6 +81,17 @@ export function AlternativeHero() {
             ease: "power2.in",
           },
           ">"
+        )
+        // Slide green background to the left (revealing black underneath)
+        // This now starts after text2 has begun exiting
+        .to(
+          greenBgRef.current,
+          {
+            x: "-100%",
+            duration: 1.5,
+            ease: "power2.inOut",
+          },
+          "<+=0.5" // Start halfway through the text exit
         );
     },
     { scope: container }
@@ -112,7 +113,7 @@ export function AlternativeHero() {
 
       <h1
         ref={text1Ref}
-        className="absolute px-4 text-center text-6xl font-bold tracking-tighter text-white sm:text-8xl md:text-9xl z-10"
+        className="absolute px-4 text-center text-6xl font-bold tracking-tighter text-white sm:text-8xl md:text-9xl z-10 opacity-0"
       >
         {text1.split("").map((char, index) => (
           <span key={index} className="letter inline-block">
@@ -123,7 +124,7 @@ export function AlternativeHero() {
 
       <h1
         ref={text2Ref}
-        className="absolute px-4 text-center text-6xl font-bold tracking-tighter text-white sm:text-8xl md:text-7xl z-10"
+        className="absolute px-4 text-center text-6xl font-bold tracking-tighter text-white sm:text-8xl md:text-7xl z-10 opacity-0"
       >
         {text2.split("").map((char, index) => (
           <span key={index} className="letter inline-block">

@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
+import { ScrollbarController } from "@/components/ui/ScrollbarController";
+import { CustomScrollbar } from "@/components/ui/CustomScrollbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +33,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} bg-neutral-950 text-white antialiased`}
       >
         <AuthProvider>
-          <SmoothScroll>{children}</SmoothScroll>
+          <SmoothScroll>
+            <ScrollbarController />
+            <CustomScrollbar />
+            {children}
+          </SmoothScroll>
         </AuthProvider>
       </body>
     </html>

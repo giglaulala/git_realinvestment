@@ -27,9 +27,10 @@ export default function Home() {
 
       <AlternativeHero />
 
+      <HowItWorks />
+
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col px-6 pb-24 sm:px-10 lg:px-16">
         <main className="flex flex-1 flex-col gap-16">
-          <HowItWorks />
           <Opportunities />
           <Location />
         </main>

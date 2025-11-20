@@ -4,13 +4,18 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { FeatureCard } from "./FeatureCard";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function HowItWorks() {
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const sectionRef = useRef<HTMLElement>(null);
+
+  const card1Ref = useRef<HTMLElement>(null);
+  const card2Ref = useRef<HTMLElement>(null);
+  const card3Ref = useRef<HTMLElement>(null);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
 
   const featureCards = [
     {
@@ -47,17 +52,59 @@ export function HowItWorks() {
 
   useGSAP(
     () => {
-      if (!titleRef.current || !sectionRef.current) return;
+      if (!titleRef.current) return;
 
-      // Set initial states
-      gsap.set(titleRef.current, { y: "100vh", opacity: 0 });
-      gsap.set(sectionRef.current, { y: "100vh", opacity: 0 });
+      const heading = containerRef.current?.querySelector('.main-heading') as HTMLElement;
+      const paragraph = containerRef.current?.querySelector('.main-paragraph') as HTMLElement;
+      if (!heading || !paragraph) return;
+
+      // Set initial states - position elements at center first, then move them offscreen
+      gsap.set(titleRef.current, { 
+        left: "50%", 
+        top: "50%", 
+        x: "-50%", 
+        y: "100vh", 
+        opacity: 0 
+      });
+      
+      gsap.set(heading, { 
+        left: "50%", 
+        top: "50%", 
+        x: "-50%", 
+        y: "100vh", 
+        opacity: 0 
+      });
+      
+      gsap.set(paragraph, { 
+        left: "50%", 
+        top: "50%", 
+        x: "-50%", 
+        y: "100vh", 
+        opacity: 0, 
+        lineHeight: "3em" 
+      });
+      
+
+      
+      // Set initial states for cards - all centered with different rotations
+      if (card1Ref.current && card2Ref.current && card3Ref.current) {
+        gsap.set([card1Ref.current, card2Ref.current, card3Ref.current], {
+          left: "50%",
+          top: "50%",
+          x: "-50%",
+          y: "100vh",
+          opacity: 0,
+        });
+        gsap.set(card1Ref.current, { rotation: -8 });
+        gsap.set(card2Ref.current, { rotation: 3 });
+        gsap.set(card3Ref.current, { rotation: -5 });
+      }
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "+=300%",
+          end: "+=600%", // Extended for more animation sequences
           pin: true,
           scrub: 1,
           anticipatePin: 1,
@@ -65,104 +112,172 @@ export function HowItWorks() {
         },
       });
 
-      // Sequence 1: Title comes up from below to center
+      // Sequence 1: "What we offer" comes up from below to center
       tl.to(titleRef.current, {
-        y: 0,
+        y: "-50%", // Center it
         opacity: 1,
         duration: 1.5,
         ease: "power2.out",
       })
         // Sequence 2: Hold the title in center briefly
         .to(titleRef.current, {
-          y: 0,
+          y: "-50%",
           opacity: 1,
           duration: 0.5,
         })
         // Sequence 3: Title exits upward completely
         .to(titleRef.current, {
-          y: "-100vh",
-          opacity: 0,
+          top: "-50%",
+          y: "-50%", // Keep the transform offset
+          opacity: 1, // Stay fully visible while exiting upward
           duration: 1.5,
           ease: "power2.in",
         })
-        // Sequence 4: Main section slides in from below (AFTER title is gone)
-        .to(sectionRef.current, {
-          y: 0,
+        // Sequence 4: "Three guardrails..." comes up from below (BIG)
+        .to(heading, {
+          y: "-50%", // Center it
           opacity: 1,
           duration: 2,
           ease: "power2.out",
+        })
+        // Sequence 5: Hold it briefly
+        .to(heading, {
+          duration: 0.5,
+        })
+        // Sequence 6: Heading shrinks and moves to top-left
+        .to(heading, {
+          fontSize: "2.5rem",
+          top: "10%",
+          left: "8%",
+          x: 0, // Clear transform
+          y: 0, // Clear transform
+          duration: 2,
+          ease: "power2.inOut",
+        })
+        // Sequence 7: Hold before paragraph appears
+        .to(heading, {
+          duration: 0.5,
+        })
+        // Sequence 8: Paragraph comes up with large line-height, aligned with heading
+        .to(paragraph, {
+          top: "35vh",
+          left: "8%",
+          x: 0, // Clear transform
+          y: 0, // Clear transform
+          opacity: 1,
+          duration: 2,
+          ease: "power2.out",
+        })
+        // Sequence 9: Compress line-height to normal and move UP closer to heading
+        .to(paragraph, {
+          lineHeight: "1.6em",
+          top: "25vh",
+          duration: 2,
+          ease: "power2.inOut",
+        })
+        // Sequence 10: Hold the final state briefly
+        .to(paragraph, {
+          duration: 1,
+        })
+        // Sequence 11: Scroll heading and paragraph up and out of view
+        .to([heading, paragraph], {
+          y: "-100vh",
+          opacity: 0,
+          duration: 2,
+          ease: "power2.inOut",
+        })
+        // Sequence 12: Cards enter from bottom, stacked on top of each other with rotations
+        .to([card1Ref.current, card2Ref.current, card3Ref.current], {
+          y: "-50%", // Center them
+          opacity: 1,
+          duration: 2,
+          ease: "power2.out",
+        })
+        // Sequence 13: Hold cards stacked briefly
+        .to([card1Ref.current, card2Ref.current, card3Ref.current], {
+          duration: 0.5,
+        })
+        // Sequence 14: Spread cards out evenly and zero their rotations
+        .to(card1Ref.current, {
+          left: "50%",
+          x: -550, // Move left from center (half card width + gap)
+          rotation: 0,
+          opacity: 1,
+          duration: 2.5,
+          ease: "power2.inOut",
+        }, "spread")
+        .to(card2Ref.current, {
+          left: "50%",
+          x: -175, // Center (half of card width)
+          rotation: 0,
+          opacity: 1,
+          duration: 2.5,
+          ease: "power2.inOut",
+        }, "spread")
+        .to(card3Ref.current, {
+          left: "50%",
+          x: 200, // Move right from center (half card width + gap)
+          rotation: 0,
+          opacity: 1,
+          duration: 2.5,
+          ease: "power2.inOut",
+        }, "spread")
+        // Sequence 15: Hold final state
+        .to([card1Ref.current, card2Ref.current, card3Ref.current], {
+          duration: 1,
         });
     },
     { scope: containerRef }
   );
 
   return (
-    <div ref={containerRef} className="relative w-full h-screen flex items-center justify-center overflow-hidden">
+    <div ref={containerRef} className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-[#0a0a0a]">
       {/* Full-Screen Title Container */}
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 flex items-center justify-center z-10">
         <h2
           ref={titleRef}
-          className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-white tracking-tight text-center px-4"
+          className="absolute text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-white tracking-tight text-center px-4"
         >
           What we offer
         </h2>
       </div>
 
-      {/* Main Section */}
-      <section
-        ref={sectionRef}
-        id="how-it-works"
-        className="rounded-[3rem] border border-white/10 bg-white/5 p-10 shadow-[0_25px_70px_rgba(12,123,89,0.17)] backdrop-blur w-full max-w-7xl mx-4"
-      >
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-2xl space-y-4">
-            <p className="text-sm uppercase tracking-[0.4em] text-emerald-200/80">
-              Fundraising & acquisition
-            </p>
-            <h3 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              Three guardrails before a single lari moves
-            </h3>
-            <p className="text-base text-white/70">
-              Each apartment is locked to its own Georgian SPV, investors pass
-              national ID verification, and contributions flow directly into
-              escrow until the raise succeeds. If the goal isn&apos;t met, the
-              bank reverses funds back to every investor automatically.
-            </p>
-          </div>
-          <button
-            type="button"
-            className="self-start rounded-full border border-white/15 px-6 py-2 text-sm font-medium text-white/80 transition hover:border-white/40 hover:text-white"
-          >
-            Download diligence sample
-          </button>
-        </div>
+      {/* Main Heading - "Three guardrails..." */}
+      <h3 className="main-heading absolute text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight text-left px-8 max-w-4xl z-10">
+        Three guardrails before a single lari moves
+      </h3>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {featureCards.map((feature) => (
-            <article
-              key={feature.title}
-              className="group flex h-full flex-col justify-between rounded-3xl border border-white/10 bg-linear-to-br from-white/8 via-neutral-900/70 to-neutral-900/90 p-6 transition duration-300 hover:border-emerald-300/40 hover:shadow-[0_40px_80px_rgba(134,239,172,0.18)]"
-            >
-              <div>
-                <h4 className="text-xl font-semibold text-white">
-                  {feature.title}
-                </h4>
-                <p className="mt-3 text-sm leading-relaxed text-white/70">
-                  {feature.description}
-                </p>
-              </div>
-              <ul className="mt-6 space-y-2 text-sm text-emerald-200/90">
-                {feature.points.map((point) => (
-                  <li key={point} className="flex items-center gap-2 text-left">
-                    <span className="h-1.5 w-6 rounded-full bg-emerald-300/70 transition group-hover:w-8" />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
-        </div>
-      </section>
+      {/* Main Paragraph */}
+      <p className="main-paragraph absolute text-xl sm:text-2xl md:text-3xl text-white/90 text-left px-8 max-w-4xl z-10">
+        Each apartment is locked to its own Georgian SPV, investors pass national ID verification, and contributions flow directly into escrow until the raise succeeds. If the goal isn&apos;t met, the bank reverses funds back to every investor automatically.
+      </p>
+
+      {/* Feature Cards Container - for animation */}
+      <div 
+        ref={cardsContainerRef}
+        className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
+      >
+        <FeatureCard
+          ref={card1Ref}
+          title={featureCards[0].title}
+          description={featureCards[0].description}
+          points={featureCards[0].points}
+        />
+        <FeatureCard
+          ref={card2Ref}
+          title={featureCards[1].title}
+          description={featureCards[1].description}
+          points={featureCards[1].points}
+        />
+        <FeatureCard
+          ref={card3Ref}
+          title={featureCards[2].title}
+          description={featureCards[2].description}
+          points={featureCards[2].points}
+        />
+      </div>
+
+
     </div>
   );
 }
