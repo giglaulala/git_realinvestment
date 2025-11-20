@@ -105,7 +105,7 @@ export function Location() {
         <Link
           ref={buttonRef}
           href={isAuthenticated ? "/trade" : "/login"}
-          className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-400/90 via-lime-300/90 to-emerald-500/90 px-7 py-3 text-sm font-semibold uppercase tracking-wide text-neutral-900 opacity-0 shadow-[0_0_35px_rgba(52,211,153,0.45)] transition hover:scale-[1.02] hover:shadow-[0_0_45px_rgba(52,211,153,0.6)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-300"
+          className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-300/90 via-emerald-400/90 to-emerald-500/90 px-7 py-3 text-sm font-semibold uppercase tracking-wide text-neutral-900 opacity-0 shadow-[0_0_35px_rgba(52,211,153,0.45)] transition hover:scale-[1.02] hover:shadow-[0_0_45px_rgba(52,211,153,0.6)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-300"
         >
           Start Investing!
         </Link>

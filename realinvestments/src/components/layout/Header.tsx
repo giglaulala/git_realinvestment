@@ -49,29 +49,35 @@ export function Header() {
     if (!headerRef.current) return;
 
     // Get the hero section height to determine when to start hiding
-    const heroSection = document.querySelector('section');
+    const heroSection = document.querySelector("section");
     if (!heroSection) return;
 
     let lastScrollY = 0;
-    let ticking = false;
+    let idleTimeout: number | null = null;
 
-    ScrollTrigger.create({
+    const trigger = ScrollTrigger.create({
       trigger: heroSection,
       start: "bottom top", // When bottom of hero reaches top of viewport
       end: "max", // Continue for the rest of the page
       onUpdate: (self) => {
         const scrollY = window.scrollY || window.pageYOffset;
-        const direction = scrollY > lastScrollY ? 'down' : 'up';
-        
+        const direction = scrollY > lastScrollY ? "down" : "up";
+
+        // Clear any pending "idle" show while the user is actively scrolling
+        if (idleTimeout !== null) {
+          window.clearTimeout(idleTimeout);
+          idleTimeout = null;
+        }
+
         // Only animate if we're past the hero section
         if (self.progress > 0) {
-          if (direction === 'down') {
+          if (direction === "down") {
             // Scrolling down - hide header
             gsap.to(headerRef.current, {
               y: -120,
               opacity: 0,
               duration: 0.3,
-              ease: "power2.out"
+              ease: "power2.out",
             });
           } else {
             // Scrolling up - show header
@@ -79,7 +85,7 @@ export function Header() {
               y: 0,
               opacity: 1,
               duration: 0.3,
-              ease: "power2.out"
+              ease: "power2.out",
             });
           }
         } else {
@@ -88,13 +94,30 @@ export function Header() {
             y: 0,
             opacity: 1,
             duration: 0.3,
-            ease: "power2.out"
+            ease: "power2.out",
           });
         }
-        
+
         lastScrollY = scrollY;
-      }
+
+        // When scrolling stops, show the header again after a short delay
+        idleTimeout = window.setTimeout(() => {
+          gsap.to(headerRef.current, {
+            y: 0,
+            opacity: 1,
+            duration: 0.3,
+            ease: "power2.out",
+          });
+        }, 200);
+      },
     });
+
+    return () => {
+      trigger.kill();
+      if (idleTimeout !== null) {
+        window.clearTimeout(idleTimeout);
+      }
+    };
   }, { dependencies: [] });
 
   const navLinks = [
@@ -115,7 +138,7 @@ export function Header() {
       <nav className="mx-auto flex items-center justify-between px-4 py-2">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2 group">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 via-lime-300 to-emerald-500 text-xs font-semibold text-black shadow-[0_0_20px_rgba(163,255,204,0.4)] transition-shadow group-hover:shadow-[0_0_30px_rgba(163,255,204,0.6)]">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-br from-emerald-300 via-emerald-400 to-emerald-500 text-xs font-semibold text-black shadow-[0_0_20px_rgba(163,255,204,0.4)] transition-shadow group-hover:shadow-[0_0_30px_rgba(163,255,204,0.6)]">
               RI
             </span>
             <span className="font-semibold text-white tracking-wide hidden sm:block">Real Investment</span>
@@ -172,7 +195,7 @@ export function Header() {
               href="/login"
               className={cn(
                 buttonVariants({ size: "sm" }),
-                "bg-emerald-400 text-black hover:bg-emerald-300 font-semibold shadow-[0_0_20px_rgba(163,255,204,0.2)]"
+                "bg-gradient-to-r from-emerald-300 to-emerald-500 text-black font-semibold shadow-[0_0_20px_rgba(163,255,204,0.2)] hover:brightness-110"
               )}
             >
               Login
@@ -220,7 +243,7 @@ export function Header() {
                   <Link
                     href="/login"
                     onClick={() => setOpen(false)}
-                    className="inline-flex items-center justify-center rounded-full bg-emerald-400 px-5 py-2 text-sm font-semibold text-black shadow-[0_0_30px_rgba(163,255,204,0.35)] transition hover:bg-emerald-300"
+                    className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-emerald-300 to-emerald-500 px-5 py-2 text-sm font-semibold text-black shadow-[0_0_30px_rgba(163,255,204,0.35)] transition hover:brightness-110"
                   >
                     Login
                   </Link>

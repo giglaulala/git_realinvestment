@@ -46,30 +46,17 @@ export function LocationModel({ progress }: LocationModelProps) {
     objectGroup.position.set(1.2, -0.45, 1.4);
     scene.add(objectGroup);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    // Lighting: base ambient + a single soft key from the right
+    const ambientLight = new THREE.AmbientLight(0x7fc7ff, 7.5);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 1.45);
-    keyLight.position.set(4.2, 4.4, 3.4);
-    keyLight.castShadow = true;
-    keyLight.shadow.mapSize.set(1024, 1024);
-    keyLight.shadow.bias = -0.00015;
-    scene.add(keyLight);
-
-    const rimLight = new THREE.DirectionalLight(0xaad0ff, 0.85);
-    rimLight.position.set(-5.5, 2.2, -4.5);
-    scene.add(rimLight);
-
-    const fillLight = new THREE.PointLight(0xffe5cf, 0.75, 18);
-    fillLight.position.set(-1.2, -0.3, 2.4);
-    objectGroup.add(fillLight);
-
-    const accentLight = new THREE.PointLight(0xffffff, 1.3, 8);
-    accentLight.position.set(0.15, 0.8, 1.8);
-    objectGroup.add(accentLight);
+    const rightSoftLight = new THREE.DirectionalLight(0xffffff, 2.1);
+    // x>0 = right side, y>0 = above, z>0 = towards the camera
+    rightSoftLight.position.set(10, 3, 2);
+    scene.add(rightSoftLight);
 
     const scrollLight = new THREE.PointLight(0x7fc7ff, 0.9, 10);
-    scrollLight.position.set(0.4, -1.1, -0.6);
+    scrollLight.position.set(0.4, -1.2, -0.2);
     scene.add(scrollLight);
 
     const loader = new OBJLoader();
@@ -171,7 +158,6 @@ export function LocationModel({ progress }: LocationModelProps) {
         THREE.MathUtils.degToRad((travelPhase - settlePhase) * 6)
       );
 
-      fillLight.position.x = -1.2 + objectGroup.position.x * 0.35;
       scrollLight.position.x = THREE.MathUtils.lerp(0.4, -0.1, settlePhase);
 
       if (model) {

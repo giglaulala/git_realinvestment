@@ -279,7 +279,7 @@ export function LoginContent() {
             <button
               type="submit"
               disabled={!isFormValid || isSubmitting}
-              className="mt-8 flex w-full items-center justify-center rounded-full bg-gradient-to-r from-emerald-400 via-lime-200 to-emerald-500 px-8 py-3 text-sm font-semibold text-black shadow-[0_0_45px_rgba(134,239,172,0.48)] transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
+              className="mt-8 flex w-full items-center justify-center rounded-full bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500 px-8 py-3 text-sm font-semibold text-black shadow-[0_0_45px_rgba(134,239,172,0.48)] transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
             >
               {isSubmitting
                 ? "Processing..."

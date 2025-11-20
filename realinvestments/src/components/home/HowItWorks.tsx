@@ -70,17 +70,24 @@ export function HowItWorks() {
 
       const setupTimeline = (isMobile: boolean) => {
         const introYOffset = isMobile ? "85vh" : "100vh"
+        // Visually center content accounting for the fixed header height:
+        // nudge the "center" up a bit so it looks centered in the
+        // remaining viewport below the header.
+        const visualCenterTop = isMobile ? "48%" : "47%"
         const headingScale = isMobile ? 1.05 : 1.2
         const riftInset = isMobile
           ? "inset(45% 35% 45% 35%)"
           : "inset(35% 30% 35% 30%)"
-        const endDistance = isMobile ? "+=300%" : "+=450%"
+        // Shorten the total pinned scroll distance so later phases
+        // (especially the second phase) start sooner and there is
+        // less “empty” scroll time between moments.
+        const endDistance = isMobile ? "+=220%" : "+=320%"
         const spreadOffset = isMobile ? 140 : 420
         const scrubValue = isMobile ? 0.6 : 1
 
         gsap.set(titleRef.current, {
           left: "50%",
-          top: "50%",
+          top: visualCenterTop,
           x: "-50%",
           y: introYOffset,
           opacity: 0,
@@ -88,7 +95,7 @@ export function HowItWorks() {
 
         gsap.set(heading, {
           left: "50%",
-          top: "50%",
+          top: visualCenterTop,
           x: "-50%",
           y: introYOffset,
           opacity: 0,
@@ -135,30 +142,32 @@ export function HowItWorks() {
           },
         })
 
+        // Phase 1 → 2: make the title and main heading feel like
+        // one continuous motion by overlapping their animations and
+        // removing the static “hold” segment.
         tl.to(titleRef.current, {
           y: "-50%",
           opacity: 1,
-          duration: 1.2,
+          duration: 1,
           ease: "power2.out",
         })
-          .to(titleRef.current, {
-            y: "-50%",
-            opacity: 1,
-            duration: 0.5,
-          })
           .to(titleRef.current, {
             top: "-50%",
             y: "-50%",
             opacity: 1,
-            duration: 1.3,
-            ease: "power2.in",
+            duration: 0.8,
+            ease: "power2.inOut",
           })
-          .to(heading, {
-            y: "-50%",
-            opacity: 1,
-            duration: 1.6,
-            ease: "power2.out",
-          })
+          .to(
+            heading,
+            {
+              y: "-50%",
+              opacity: 1,
+              duration: 1,
+              ease: "power2.out",
+            },
+            "<0.25" // start shortly after the title begins moving up
+          )
           .addLabel("schism")
           .to(
             headingLines[0],
