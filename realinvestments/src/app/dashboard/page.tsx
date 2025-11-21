@@ -136,7 +136,7 @@ const floatingVariants = {
     transition: {
       duration: 6,
       repeat: Infinity,
-      ease: "easeInOut",
+      ease: "easeInOut" as const,
     },
   },
   float2: {
@@ -145,7 +145,7 @@ const floatingVariants = {
     transition: {
       duration: 7,
       repeat: Infinity,
-      ease: "easeInOut",
+      ease: "easeInOut" as const,
     },
   },
   float3: {
@@ -154,7 +154,7 @@ const floatingVariants = {
     transition: {
       duration: 8,
       repeat: Infinity,
-      ease: "easeInOut",
+      ease: "easeInOut" as const,
     },
   },
   float4: {
@@ -163,7 +163,7 @@ const floatingVariants = {
     transition: {
       duration: 7.5,
       repeat: Infinity,
-      ease: "easeInOut",
+      ease: "easeInOut" as const,
     },
   },
 };
