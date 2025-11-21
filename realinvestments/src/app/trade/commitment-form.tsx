@@ -117,7 +117,7 @@ export function CommitmentForm({ opportunities }: CommitmentFormProps) {
         <div className="lg:col-span-2">
           <button
             type="submit"
-            className="w-full rounded-full bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500 px-8 py-3 text-sm font-semibold text-black shadow-[0_0_50px_rgba(134,239,172,0.5)] transition hover:scale-[1.01]"
+            className="w-full rounded-full bg-linear-to-r from-emerald-300 via-emerald-400 to-emerald-500 px-8 py-3 text-sm font-semibold text-black shadow-[0_0_50px_rgba(134,239,172,0.5)] transition hover:scale-[1.01]"
           >
             Submit commitment
           </button>
@@ -175,7 +175,7 @@ export function CommitmentForm({ opportunities }: CommitmentFormProps) {
                 <button
                   type="button"
                   onClick={handleConfirmPurchase}
-                  className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500 px-6 py-2.5 text-sm font-semibold text-black shadow-[0_0_40px_rgba(134,239,172,0.45)] transition hover:scale-[1.02]"
+                  className="inline-flex items-center justify-center rounded-full bg-linear-to-r from-emerald-300 via-emerald-400 to-emerald-500 px-6 py-2.5 text-sm font-semibold text-black shadow-[0_0_40px_rgba(134,239,172,0.45)] transition hover:scale-[1.02]"
                 >
                   Confirm purchase
                 </button>

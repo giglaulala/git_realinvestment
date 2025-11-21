@@ -102,7 +102,7 @@ export default function ProfilePage() {
                 </p>
               </div>
               <Link
-                href="/portfolio"
+                href="/dashboard"
                 className="rounded-full border border-white/15 px-5 py-2 text-xs font-medium text-white/80 transition hover:border-white/40 hover:text-white"
               >
                 View holdings
