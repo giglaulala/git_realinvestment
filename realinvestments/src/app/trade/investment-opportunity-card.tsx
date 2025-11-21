@@ -72,10 +72,9 @@ export function InvestmentOpportunityCard({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
       whileHover={{ scale: 1.02 }}
-      transition={{ 
+      transition={{
         duration: 0.3,
-        layout: { duration: 0.4, ease: "easeInOut" },
-        exit: { duration: 0.05 }
+        layout: { duration: 0.4, ease: "easeInOut" as const },
       }}
       className={`group relative overflow-hidden rounded-[2rem] border border-white/10 bg-linear-to-br from-white/10 via-neutral-900/80 to-neutral-900/95 p-6 shadow-[0_10px_30px_rgba(15,118,110,0.15)] transition duration-300 hover:border-emerald-300/50 hover:shadow-[0_15px_40px_rgba(134,239,172,0.2)] ${className ?? ""}`}
     >
