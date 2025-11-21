@@ -58,10 +58,9 @@ export function ExpandedPropertyView({ opportunity, onClose }: ExpandedPropertyV
         key="expanded-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ 
-          duration: 0.3,
-          exit: { duration: 0.05 }
+        exit={{ opacity: 0, transition: { duration: 0.05 } }}
+        transition={{
+          opacity: { duration: 0.3 },
         }}
         className="fixed inset-0 z-40 bg-neutral-950/80 backdrop-blur-sm"
         onClick={onClose}
@@ -77,18 +76,16 @@ export function ExpandedPropertyView({ opportunity, onClose }: ExpandedPropertyV
         }}
         transition={{
           layout: { duration: 0.4, ease: "easeInOut" },
-          exit: { duration: 0.06 }
         }}
       >
         {/* Close button */}
         <motion.button
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ 
-            delay: 0.4, 
+          exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.05, delay: 0 } }}
+          transition={{
+            delay: 0.4,
             duration: 0.2,
-            exit: { duration: 0.05, delay: 0 }
           }}
           onClick={onClose}
           className="fixed right-6 top-6 z-50 rounded-full border border-white/15 bg-black/60 p-3 text-white backdrop-blur transition hover:border-white/30 hover:bg-black/80 sm:right-10 sm:top-10 lg:right-12 lg:top-12"
