@@ -13,6 +13,7 @@ export function AlternativeHero() {
   const text2Ref = useRef<HTMLHeadingElement>(null)
   const greenBgRef = useRef<HTMLDivElement>(null)
   const wordRefs = useRef<(HTMLSpanElement | null)[]>([])
+  const letterRefs = useRef<(HTMLSpanElement | null)[]>([])
   useGSAP(
     () => {
       if (
@@ -20,20 +21,24 @@ export function AlternativeHero() {
         !text2Ref.current ||
         !greenBgRef.current ||
         wordRefs.current.length === 0 ||
-        !wordRefs.current[0]
+        !wordRefs.current[0] ||
+        letterRefs.current.length === 0
       ) {
         return
       }
 
-      const words = ["Buy", "a", "piece", "of", "Georgia!"]
+      const words = ["Own", "a", "piece", "of", "Georgia!"]
       const allWordsReady = words.every((_, index) => wordRefs.current[index])
-      if (!allWordsReady) return
+      const letters = letterRefs.current.filter(
+        (letter): letter is HTMLSpanElement => Boolean(letter)
+      )
+      if (!allWordsReady || letters.length === 0) return
 
       const setupTimeline = (isMobile: boolean) => {
         const scaleOut = isMobile ? 0.35 : 0.1
         const initialWordScale = isMobile ? 7 : 18
-        const endDistance = isMobile ? "+=135%" : "+=165%"
-        const holdDuration = isMobile ? 3.6 : 5
+        const endDistance = isMobile ? "+=600%" : "+=700%"
+        const holdDuration = isMobile ? 3 : 3.5
         const text2EnterOffset = isMobile ? 25 : 35
         const text2ExitOffset = isMobile ? -260 : -360
         const text2ExitDuration = isMobile ? 4.6 : 6.1
@@ -63,6 +68,52 @@ export function AlternativeHero() {
           opacity: 0,
           rotate: isMobile ? 0 : 0,
         })
+        gsap.set(letters, {
+          transformOrigin: "center center",
+          skewY: 0,
+          rotate: 0,
+        })
+
+        const bendState = { value: 0 }
+        let smoothedVelocity = 0
+        let relaxTween: gsap.core.Tween | null = null
+        const skewSetter = gsap.quickSetter(letters, "skewY", "deg")
+        const rotateSetter = gsap.quickSetter(letters, "rotate", "deg")
+        const maxBend = 4
+        const bendFactor = isMobile ? 0.015 : 0.012
+        const updateLetters = (value: number) => {
+          skewSetter(value)
+          rotateSetter(value * -0.2)
+        }
+        const settleLetters = () => {
+          relaxTween?.kill()
+          relaxTween = gsap.to(bendState, {
+            value: 0,
+            duration: 1.2,
+            ease: "power2.out",
+            onUpdate: () => updateLetters(bendState.value),
+          })
+        }
+        const bendLettersFromVelocity = (velocity: number) => {
+          smoothedVelocity = gsap.utils.interpolate(
+            smoothedVelocity,
+            velocity,
+            0.12
+          )
+          const bendTarget = gsap.utils.clamp(
+            -maxBend,
+            maxBend,
+            -smoothedVelocity * bendFactor
+          )
+          gsap.killTweensOf(bendState)
+          gsap.to(bendState, {
+            value: bendTarget,
+            duration: 0.35,
+            ease: "power1.out",
+            onUpdate: () => updateLetters(bendState.value),
+            onComplete: settleLetters,
+          })
+        }
 
         const tl = gsap.timeline({
           defaults: {
@@ -74,9 +125,13 @@ export function AlternativeHero() {
             start: "top top",
             end: endDistance,
             pin: true,
-            scrub: isMobile ? 3.4 : 4.8,
+            scrub: 2.5,
             anticipatePin: 1,
             invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              bendLettersFromVelocity(self.getVelocity())
+            },
+            onScrubComplete: settleLetters,
           },
         })
 
@@ -91,6 +146,7 @@ export function AlternativeHero() {
                 {
                   opacity: 1,
                   scale: 1,
+                  duration: isMobile ? 2 : 2.5,
                 },
                 ">"
               ).to(
@@ -99,9 +155,12 @@ export function AlternativeHero() {
                   opacity: 0,
                   scale: scaleOut,
                   ease: "power2.in",
+                  duration: isMobile ? 2 : 2.5,
                 },
                 "<"
               )
+              // Add a pause/hold between word transitions
+              tl.to({}, { duration: isMobile ? 1.5 : 2 })
             }
           }
         })
@@ -112,7 +171,10 @@ export function AlternativeHero() {
             opacity: 0,
             scale: scaleOut,
             ease: "power2.in",
+            duration: isMobile ? 2 : 2.5,
           })
+          // Add a pause after last word exits before next section
+          tl.to({}, { duration: isMobile ? 1 : 1.5 })
         }
 
         tl.to(text2Ref.current, {
@@ -138,21 +200,20 @@ export function AlternativeHero() {
             greenBgRef.current,
             {
               opacity: 0,
-              duration: isMobile ? 0.6 : 0.9,
-              ease: "power2.inOut",
+              duration: isMobile ? 0.3 : 0.4,
+              ease: "power2.in",
             },
             "<"
           )
           .to(
-            {},
+            text2Ref.current,
             {
-              duration: isMobile ? 0.35 : 0.55,
-            }
+              opacity: 0,
+              duration: isMobile ? 0.25 : 0.35,
+              ease: "power2.in",
+            },
+            "<"
           )
-          .to(text2Ref.current, {
-            opacity: 0,
-            duration: 0.01,
-          })
 
         return () => {
           tl.kill()
@@ -170,8 +231,8 @@ export function AlternativeHero() {
     { scope: container }
   )
 
-  const text1 = "Buy a piece of Georgia!"
-  const text2 = "Investing in Real Estate has never been easier"
+  const text1 = "Own a piece of Georgia!"
+  const text2 = "Investing in real estate has never been easier"
   const words = text1.split(" ")
 
   return (
@@ -214,7 +275,13 @@ export function AlternativeHero() {
         suppressHydrationWarning
       >
         {text2.split("").map((char, index) => (
-          <span key={index} className="letter inline-block">
+          <span
+            key={index}
+            ref={(el) => {
+              letterRefs.current[index] = el
+            }}
+            className="letter inline-block"
+          >
             {char === " " ? "\u00A0" : char}
           </span>
         ))}

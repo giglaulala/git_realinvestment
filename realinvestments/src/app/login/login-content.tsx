@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { UploadCloud, UserCheck } from "lucide-react"
 
 import { useAuth } from "@/components/providers/auth-provider"
+import { FlowButton } from "@/components/ui/flow-button"
 
 type ViewMode = "login" | "signup"
 
@@ -139,6 +140,15 @@ export function LoginContent() {
       </div>
 
       <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-12">
+        <div className="w-fit">
+          <FlowButton
+            text="Back to home"
+            direction="left"
+            variant="light"
+            onClick={() => router.push("/")}
+          />
+        </div>
+
         <header className="space-y-4">
           <p className="text-sm uppercase tracking-[0.4em] text-emerald-200/70">
             Investor access
@@ -156,24 +166,13 @@ export function LoginContent() {
             onSubmit={handleSubmit}
             className="rounded-[2.5rem] border border-white/12 bg-white/6 p-8 backdrop-blur"
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-[0.35em] text-emerald-200/70">
-                  {isSignup ? "Create profile" : "Secure login"}
-                </p>
-                <h2 className="mt-2 text-2xl font-semibold text-white">
-                  {isSignup ? "Link your identity" : "Welcome back"}
-                </h2>
-              </div>
-              <button
-                type="button"
-                onClick={toggleMode}
-                className="text-sm font-medium text-emerald-200/80 transition hover:text-emerald-100"
-              >
-                {isSignup
-                  ? "Already onboarded? Log in"
-                  : "New here? Create account"}
-              </button>
+            <div>
+              <p className="text-xs uppercase tracking-[0.35em] text-emerald-200/70">
+                {isSignup ? "Create profile" : "Secure login"}
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold text-white">
+                {isSignup ? "Link your identity" : "Welcome back"}
+              </h2>
             </div>
 
             {isSignup && (
@@ -187,7 +186,7 @@ export function LoginContent() {
                 <input
                   id="name"
                   name="name"
-                  placeholder="Nino Beridze"
+                  placeholder="User User"
                   required
                   value={formState.name}
                   onChange={(event) => handleChange("name", event.target.value)}
@@ -234,6 +233,18 @@ export function LoginContent() {
                 }
                 className="mt-4 w-full rounded-2xl border border-white/15 bg-black/40 px-5 py-4 text-base text-white transition placeholder:text-white/30 focus:border-emerald-300/60 focus:outline-none focus:ring-2 focus:ring-emerald-300/40"
               />
+            </div>
+
+            <div className="mt-4 text-left">
+              <button
+                type="button"
+                onClick={toggleMode}
+                className="text-sm font-medium text-emerald-200/80 transition hover:text-emerald-100"
+              >
+                {isSignup
+                  ? "Already onboarded? Log in"
+                  : "New here? Create account"}
+              </button>
             </div>
 
             {isSignup && (

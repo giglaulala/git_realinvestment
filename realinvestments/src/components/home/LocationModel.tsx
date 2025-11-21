@@ -28,11 +28,18 @@ export function LocationModel({ progress }: LocationModelProps) {
       return;
     }
 
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      alpha: true,
-      antialias: true,
-    });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: true,
+        failIfMajorPerformanceCaveat: false,
+      });
+    } catch (error) {
+      console.warn("WebGL context creation failed:", error);
+      return;
+    }
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.15;

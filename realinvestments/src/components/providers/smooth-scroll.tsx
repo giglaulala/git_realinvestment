@@ -9,6 +9,10 @@ import {
 } from "react";
 
 import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 type SmoothScrollProps = {
   children: ReactNode;
@@ -26,30 +30,8 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
   const [lenis, setLenis] = useState<LenisInstance | null>(null);
 
   useEffect(() => {
-    const instance = new Lenis({
-      smoothWheel: true,
-    });
-
-    const initFrame = requestAnimationFrame(() => {
-      setLenis(instance);
-    });
-
-    let animationFrame: number | null = null;
-
-    const raf = (time: number) => {
-      instance.raf(time);
-      animationFrame = requestAnimationFrame(raf);
-    };
-
-    animationFrame = requestAnimationFrame(raf);
-
-    return () => {
-      if (animationFrame !== null) {
-        cancelAnimationFrame(animationFrame);
-      }
-      cancelAnimationFrame(initFrame);
-      instance.destroy();
-    };
+    // Temporarily disable Lenis
+    return () => {};
   }, []);
 
   return (

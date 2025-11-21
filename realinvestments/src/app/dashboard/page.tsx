@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { LogOut, Sparkles, ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 import { useAuth } from "@/components/providers/auth-provider";
 import { Tiles } from "@/components/ui/tiles";
@@ -118,6 +119,46 @@ const sparklinePoints = (series: number[]) => {
     .join(" ");
 };
 
+// Floating animation variants
+const floatingVariants = {
+  float1: {
+    y: [0, -8, 0],
+    x: [0, 3, 0],
+    transition: {
+      duration: 6,
+      repeat: Infinity,
+      ease: "easeInOut",
+    },
+  },
+  float2: {
+    y: [0, -10, 0],
+    x: [0, -4, 0],
+    transition: {
+      duration: 7,
+      repeat: Infinity,
+      ease: "easeInOut",
+    },
+  },
+  float3: {
+    y: [0, -6, 0],
+    x: [0, 5, 0],
+    transition: {
+      duration: 8,
+      repeat: Infinity,
+      ease: "easeInOut",
+    },
+  },
+  float4: {
+    y: [0, -9, 0],
+    x: [0, -3, 0],
+    transition: {
+      duration: 7.5,
+      repeat: Infinity,
+      ease: "easeInOut",
+    },
+  },
+};
+
 export default function DashboardPage() {
   const router = useRouter();
   const { isAuthenticated, user, logout } = useAuth();
@@ -177,7 +218,12 @@ export default function DashboardPage() {
       </div>
 
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-3 px-6 pb-4 pt-4 sm:px-8 lg:px-10">
-        <header className="flex flex-col gap-2.5 rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur md:flex-row md:items-center md:justify-between">
+        <motion.header
+          className="flex flex-col gap-2.5 rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur md:flex-row md:items-center md:justify-between"
+          animate="float1"
+          variants={floatingVariants}
+          whileHover={{ y: 0, x: 0 }}
+        >
           <div className="flex items-center gap-2.5">
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-linear-to-br from-emerald-300 via-lime-200 to-emerald-400 text-sm font-semibold text-black shadow-[0_0_40px_rgba(134,239,172,0.45)]">
               {investorInitials}
@@ -213,28 +259,48 @@ export default function DashboardPage() {
               Logout
             </button>
           </div>
-        </header>
+        </motion.header>
 
         <div className="flex flex-col gap-3">
-          <section className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur">
+          <motion.section
+            className="rounded-xl border border-white/10 bg-white/5 p-3 backdrop-blur"
+            animate="float2"
+            variants={floatingVariants}
+            whileHover={{ y: 0, x: 0 }}
+          >
             <div className="grid grid-cols-2 gap-2.5">
-              {dashboardStats.map((stat) => (
-                <article
+              {dashboardStats.map((stat, index) => (
+                <motion.article
                   key={stat.title}
                   className="rounded-lg border border-white/10 bg-black/20 p-2.5 shadow-[0_10px_35px_rgba(5,150,105,0.2)]"
+                  animate={{
+                    y: [0, index === 0 ? -5 : -7, 0],
+                    x: [0, index === 0 ? 2 : -2, 0],
+                  }}
+                  transition={{
+                    duration: index === 0 ? 5.5 : 6.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  whileHover={{ y: 0, x: 0 }}
                 >
                   <p className="text-[0.65rem] uppercase tracking-[0.3em] text-white/50">
                     {stat.title}
                   </p>
                   <p className="mt-1.5 text-base font-semibold text-white">{stat.value}</p>
                   <p className="mt-0.5 text-[0.7rem] text-white/70">{stat.meta}</p>
-                </article>
+                </motion.article>
               ))}
             </div>
-          </section>
+          </motion.section>
 
           <div className="grid grid-cols-12 gap-3">
-            <div className="col-span-12 flex flex-col rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur lg:col-span-4">
+            <motion.div
+              className="col-span-12 flex flex-col rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur lg:col-span-4"
+              animate="float3"
+              variants={floatingVariants}
+              whileHover={{ y: 0, x: 0 }}
+            >
               <div className="flex items-center gap-1.5 text-xs uppercase tracking-[0.25em] text-emerald-200/80">
                 <Sparkles className="h-3 w-3 text-emerald-200" />
                 Market signals
@@ -278,9 +344,14 @@ export default function DashboardPage() {
                   );
                 })}
               </div>
-            </div>
+            </motion.div>
 
-            <div className="col-span-12 flex flex-col rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur lg:col-span-5">
+            <motion.div
+              className="col-span-12 flex flex-col rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur lg:col-span-5"
+              animate="float1"
+              variants={floatingVariants}
+              whileHover={{ y: 0, x: 0 }}
+            >
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[0.65rem] uppercase tracking-[0.3em] text-emerald-200/80">
@@ -363,9 +434,14 @@ export default function DashboardPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="col-span-12 flex flex-col lg:col-span-3">
+            <motion.div
+              className="col-span-12 flex flex-col lg:col-span-3"
+              animate="float4"
+              variants={floatingVariants}
+              whileHover={{ y: 0, x: 0 }}
+            >
               <div className="flex flex-col rounded-lg border border-white/10 bg-neutral-900/70 p-4">
                 <h3 className="text-xs font-semibold text-white">Upcoming sales</h3>
                 <ul className="mt-3 space-y-2 text-xs">
@@ -383,7 +459,7 @@ export default function DashboardPage() {
                   ))}
                 </ul>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
