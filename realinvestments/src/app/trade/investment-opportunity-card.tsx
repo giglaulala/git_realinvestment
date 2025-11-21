@@ -21,6 +21,7 @@ export type InvestmentOpportunity = {
   name: string;
   location: string;
   status: string;
+  daysUntilClose: number;
   pricePerShare: string;
   priceChange: string;
   avgPrice: string;

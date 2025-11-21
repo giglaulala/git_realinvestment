@@ -1,9 +1,10 @@
 "use client"
 
-import { X, MapPin, TrendingUp, Users, Layers, Building2, Home, Train, Bus, ShoppingBag, Trees, GraduationCap } from "lucide-react"
+import { X, MapPin, TrendingUp, Users, Layers, Building2, Home, Train, Bus, ShoppingBag, Trees, GraduationCap, CheckCircle2 } from "lucide-react"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import type { InvestmentOpportunity } from "./investment-opportunity-card"
+import { saveCommitment } from "@/lib/commitments"
 
 type ExpandedPropertyViewProps = {
   opportunity: InvestmentOpportunity
@@ -12,9 +13,43 @@ type ExpandedPropertyViewProps = {
 
 export function ExpandedPropertyView({ opportunity, onClose }: ExpandedPropertyViewProps) {
   const [shareCount, setShareCount] = useState<string>("1")
+  const [isCommitting, setIsCommitting] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
   const sharePrice = parseFloat(opportunity.pricePerShare.replace(/[₾,k]/g, ""))
-  const totalCost = sharePrice * (parseInt(shareCount) || 0)
+  const totalCost = sharePrice * (parseFloat(shareCount) || 0)
   const changePositive = opportunity.priceChange.startsWith("+")
+
+  const handleCommit = () => {
+    const shares = parseFloat(shareCount)
+    if (!shares || shares <= 0) return
+
+    setIsCommitting(true)
+
+    // Simulate processing delay
+    setTimeout(() => {
+      // Calculate closing date based on daysUntilClose
+      const closingDate = new Date()
+      closingDate.setDate(closingDate.getDate() + opportunity.daysUntilClose)
+      
+      saveCommitment({
+        propertyCode: opportunity.code,
+        propertyName: opportunity.name,
+        location: opportunity.location,
+        shares,
+        pricePerShare: sharePrice,
+        totalAmount: totalCost,
+        closingDate: closingDate.toISOString(),
+      })
+
+      setIsCommitting(false)
+      setShowSuccess(true)
+
+      // Close modal after showing success
+      setTimeout(() => {
+        onClose()
+      }, 2000)
+    }, 800)
+  }
 
   return (
     <>
@@ -256,7 +291,8 @@ export function ExpandedPropertyView({ opportunity, onClose }: ExpandedPropertyV
                   <input
                     id="share-count"
                     type="number"
-                    min="1"
+                    min="0.01"
+                    step="0.01"
                     max="100"
                     value={shareCount}
                     onChange={(e) => setShareCount(e.target.value)}
@@ -273,11 +309,20 @@ export function ExpandedPropertyView({ opportunity, onClose }: ExpandedPropertyV
                   </p>
                 </div>
 
-                <button
-                  className="w-full rounded-full bg-emerald-400 px-6 py-3 font-semibold text-white transition hover:bg-emerald-300"
-                >
-                  Commit to Purchase
-                </button>
+                {showSuccess ? (
+                  <div className="flex items-center justify-center gap-2 rounded-full bg-emerald-400/20 px-6 py-3 text-emerald-200">
+                    <CheckCircle2 className="h-5 w-5" />
+                    <span className="font-semibold">Commitment Successful!</span>
+                  </div>
+                ) : (
+                  <button
+                    onClick={handleCommit}
+                    disabled={isCommitting || !shareCount || parseFloat(shareCount) <= 0}
+                    className="w-full rounded-full bg-emerald-400 px-6 py-3 font-semibold text-white transition hover:bg-emerald-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isCommitting ? "Processing..." : "Commit to Purchase"}
+                  </button>
+                )}
 
                 <p className="text-center text-xs text-white/50">
                   Funds will be held in escrow until raise closes

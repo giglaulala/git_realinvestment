@@ -10,12 +10,13 @@ import { useAuth } from "@/components/providers/auth-provider";
 import { Tiles } from "@/components/ui/tiles";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getCommitments, getTotalCommitted, type Commitment } from "@/lib/commitments";
 
-const dashboardStats = [
+// This will be replaced with dynamic data in the component
+const dashboardStatsTemplate = [
   {
     title: "Escrow commitments",
-    value: "₾128,400",
-    meta: "Across 3 open raises this week",
+    key: "escrow",
   },
   {
     title: "Total equity value",
@@ -26,14 +27,18 @@ const dashboardStats = [
 
 const fundingPeriodHoldings = [
   {
-    name: "Vake Vista SPV",
-    stake: "5% equity • ₾5,750",
+    name: "Tsereteli Avenue Unit 503",
+    stake: "12 shares • ₾5,750",
+    shares: 12,
+    amount: 5750,
     fundingPercent: 78,
     daysLeft: 3,
   },
   {
-    name: "Saburtalo Heights",
-    stake: "1.5% equity • ₾1,920",
+    name: "Chavchavadze Residence 801",
+    stake: "8 shares • ₾1,920",
+    shares: 8,
+    amount: 1920,
     fundingPercent: 65,
     daysLeft: 2,
   },
@@ -41,30 +46,32 @@ const fundingPeriodHoldings = [
 
 const ownedHoldings = [
   {
-    name: "Batumi Seaside",
-    stake: "3% equity • ₾2,760",
+    name: "Saakadze Street Loft 204",
+    stake: "15 shares • ₾2,760",
+    shares: 15,
     nextEvent: "Sale pending · 22 Dec",
   },
   {
-    name: "Old Town Revival",
-    stake: "4% equity • ₾5,280",
+    name: "Khimshiashvili Tower 1102",
+    stake: "20 shares • ₾5,280",
+    shares: 20,
     nextEvent: "Sale pending · 15 Dec",
   },
 ];
 
 const payoutSchedule = [
   {
-    title: "Sale completion · Vake Vista",
+    title: "Sale completion · Tsereteli",
     date: "12 Dec",
     detail: "₾5,750 to TBC",
   },
   {
-    title: "Sale completion · Batumi",
+    title: "Sale completion · Saakadze",
     date: "22 Dec",
     detail: "₾2,760 to TBC",
   },
   {
-    title: "Sale completion · Old Town",
+    title: "Sale completion · Khimshiashvili",
     date: "15 Dec",
     detail: "₾5,280 to TBC",
   },
@@ -72,31 +79,31 @@ const payoutSchedule = [
 
 const stockPerformance = [
   {
-    label: "Vake Vista",
+    label: "Tsereteli Avenue",
     latest: "₾1,150",
     change: "+3.4%",
     series: [920, 980, 1010, 1080, 1130, 1150],
   },
   {
-    label: "Batumi Residences",
+    label: "Chavchavadze Res.",
     latest: "₾920",
     change: "+1.2%",
     series: [870, 860, 880, 900, 910, 920],
   },
   {
-    label: "Kutaisi Riverside",
+    label: "Saakadze Street",
     latest: "₾640",
     change: "-0.8%",
     series: [660, 655, 652, 648, 646, 640],
   },
   {
-    label: "Old Town Revival",
+    label: "Khimshiashvili",
     latest: "₾1,320",
     change: "+5.2%",
     series: [1200, 1220, 1250, 1280, 1300, 1320],
   },
   {
-    label: "Saburtalo Heights",
+    label: "Rustaveli Tower",
     latest: "₾1,280",
     change: "+2.1%",
     series: [1180, 1200, 1210, 1230, 1250, 1280],
@@ -172,6 +179,8 @@ export default function DashboardPage() {
   const [sellPrice, setSellPrice] = useState("");
   const [sellSubmitting, setSellSubmitting] = useState(false);
   const [sellSuccess, setSellSuccess] = useState(false);
+  const [commitments, setCommitments] = useState<Commitment[]>([]);
+  const [totalCommitted, setTotalCommitted] = useState(0);
 
   // For now this is a simple fixed secondary-market price per share ($),
   // so investors can only choose quantity, not change the price.
@@ -183,12 +192,79 @@ export default function DashboardPage() {
     }
   }, [isAuthenticated, router]);
 
+  // Load commitments from localStorage
+  useEffect(() => {
+    const loadCommitments = () => {
+      const loadedCommitments = getCommitments();
+      setCommitments(loadedCommitments);
+      setTotalCommitted(getTotalCommitted());
+    };
+
+    // Load initially
+    loadCommitments();
+
+    // Reload when window gains focus (user returns from another tab)
+    const handleFocus = () => {
+      loadCommitments();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, []);
+
+  // Create dynamic dashboard stats
+  const dashboardStats = useMemo(() => {
+    // Calculate total escrow: commitments + funding period holdings
+    const fundingPeriodTotal = fundingPeriodHoldings.reduce((sum, holding) => sum + holding.amount, 0);
+    const totalEscrow = totalCommitted + fundingPeriodTotal;
+    const totalCommitmentCount = commitments.length + fundingPeriodHoldings.length;
+    
+    return [
+      {
+        title: "Escrow commitments",
+        value: totalEscrow > 0 ? `₾${totalEscrow.toLocaleString()}` : "₾0",
+        meta: totalCommitmentCount > 0 
+          ? `Across ${totalCommitmentCount} ${totalCommitmentCount === 1 ? 'commitment' : 'commitments'}`
+          : "No active commitments",
+      },
+      {
+        title: "Total equity value",
+        value: "₾15,710",
+        meta: "Across 4 positions",
+      },
+    ];
+  }, [commitments.length, totalCommitted]);
+
   const handleOpenSellOrder = (holdingName: string) => {
     setActiveSellHolding(holdingName);
     setSellQuantity("");
     setSellPrice(FIXED_SHARE_PRICE.toString());
     setSellSuccess(false);
   };
+
+  // Get owned shares for active sell holding
+  const getOwnedShares = (holdingName: string): number => {
+    // Check commitments first
+    const commitment = commitments.find(c => c.propertyName === holdingName);
+    if (commitment) return commitment.shares;
+    
+    // Check funding period holdings
+    const fundingHolding = fundingPeriodHoldings.find(h => h.name === holdingName);
+    if (fundingHolding) return fundingHolding.shares;
+    
+    // Check owned holdings
+    const ownedHolding = ownedHoldings.find(h => h.name === holdingName);
+    if (ownedHolding) return ownedHolding.shares;
+    
+    return 0;
+  };
+
+  const ownedShares = activeSellHolding ? getOwnedShares(activeSellHolding) : 0;
+  const sellQuantityNum = parseFloat(sellQuantity) || 0;
+  const exceedsOwnedShares = sellQuantityNum > ownedShares;
 
   const handleCloseSellModal = () => {
     if (sellSubmitting) return;
@@ -198,6 +274,9 @@ export default function DashboardPage() {
   const handleSubmitSellOrder = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!sellQuantity || !sellPrice) return;
+    
+    // Validate quantity doesn't exceed owned shares
+    if (exceedsOwnedShares) return;
 
     setSellSubmitting(true);
 
@@ -417,6 +496,56 @@ export default function DashboardPage() {
                 <div>
                   <h3 className="mb-2 text-xs font-semibold text-white/80">Funding period</h3>
                   <div className="space-y-2">
+                    {commitments.length === 0 && fundingPeriodHoldings.length === 0 && (
+                      <p className="rounded-lg border border-white/10 bg-black/30 p-3 text-center text-xs text-white/50">
+                        No active commitments. Visit the trade page to commit capital.
+                      </p>
+                    )}
+                    {commitments.map((commitment) => {
+                      const isListed = listedHoldings.has(commitment.propertyName);
+                      // Calculate days left from stored closing date
+                      const closeDate = new Date(commitment.closingDate);
+                      const daysLeft = Math.max(0, Math.ceil((closeDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
+                      
+                      return (
+                      <div
+                        key={commitment.id}
+                        className="relative rounded-lg border border-white/10 bg-black/30 p-2.5 transition hover:border-emerald-300/40 hover:bg-black/50"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-semibold text-white">{commitment.propertyName}</p>
+                            <p className="text-[0.7rem] text-white/60">
+                              {commitment.shares} {commitment.shares === 1 ? 'share' : 'shares'} • ₾{commitment.totalAmount.toLocaleString()}
+                            </p>
+                          </div>
+                          <span className="rounded-full border border-white/10 px-2 py-0.5 text-[0.6rem] uppercase tracking-[0.25em] text-white/60">
+                            Pending
+                          </span>
+                        </div>
+                        <div className="mt-1.5 flex items-center justify-between">
+                          <p className="text-[0.7rem] text-emerald-200/90">
+                            {daysLeft === 0 ? "Closes today" : `${daysLeft} ${daysLeft === 1 ? 'day' : 'days'} left`}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              !isListed && handleOpenSellOrder(commitment.propertyName)
+                            }
+                            disabled={isListed}
+                            className={`flex items-center gap-1 rounded-full px-2 py-1 text-[0.65rem] font-semibold transition ${
+                              isListed
+                                ? "cursor-not-allowed border-white/15 bg-white/5 text-white/40"
+                                : "border border-emerald-300/40 bg-emerald-400/10 text-emerald-200 hover:border-emerald-300/60 hover:bg-emerald-400/20"
+                            }`}
+                          >
+                            <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+                            {isListed ? "Listed" : "Sell"}
+                          </button>
+                        </div>
+                      </div>
+                      );
+                    })}
                     {fundingPeriodHoldings.map((holding) => (
                       <div
                         key={holding.name}
@@ -474,8 +603,8 @@ export default function DashboardPage() {
                             <p className="text-sm font-semibold text-white">{holding.name}</p>
                             <p className="text-[0.7rem] text-white/60">{holding.stake}</p>
                           </div>
-                          <span className="rounded-full border border-emerald-300/40 bg-emerald-400/10 px-2 py-0.5 text-[0.6rem] uppercase tracking-[0.25em] text-emerald-200/80">
-                            100% funded
+                          <span className="rounded-full border border-white/10 px-2 py-0.5 text-[0.6rem] uppercase tracking-[0.25em] text-white/60">
+                            Owned
                           </span>
                         </div>
                         <div className="mt-1.5 flex items-center justify-between">
@@ -489,7 +618,7 @@ export default function DashboardPage() {
                               !isListed && handleOpenSellOrder(holding.name)
                             }
                             disabled={isListed}
-                            className={`ml-2 flex items-center gap-1 rounded-full px-2 py-1 text-[0.65rem] font-semibold transition ${
+                            className={`flex items-center gap-1 rounded-full px-2 py-1 text-[0.65rem] font-semibold transition ${
                               isListed
                                 ? "cursor-not-allowed border-white/15 bg-white/5 text-white/40"
                                 : "border border-emerald-300/40 bg-emerald-400/10 text-emerald-200 hover:border-emerald-300/60 hover:bg-emerald-400/20"
@@ -605,20 +734,26 @@ export default function DashboardPage() {
                         <Input
                           id="sell-quantity"
                           type="number"
-                          min={1}
-                          step={1}
+                          min={0.01}
+                          step={0.01}
                           required
                           value={sellQuantity}
                           onChange={(event) =>
                             setSellQuantity(event.target.value)
                           }
                           className="border-white/15 bg-black/60 text-sm text-white placeholder:text-white/30 focus-visible:ring-emerald-400"
-                          placeholder="e.g. 100"
+                          placeholder="e.g. 5.5"
                         />
                       </div>
-                      <p className="mt-1 text-[0.65rem] text-white/45">
-                        You can choose to only sell part of your total position.
-                      </p>
+                      {exceedsOwnedShares && sellQuantity ? (
+                        <p className="mt-1.5 text-[0.65rem] text-rose-300">
+                          ⚠ You only own {ownedShares} {ownedShares === 1 ? 'share' : 'shares'}. Cannot list more than you own.
+                        </p>
+                      ) : (
+                        <p className="mt-1 text-[0.65rem] text-white/45">
+                          You own {ownedShares} {ownedShares === 1 ? 'share' : 'shares'}. You can sell part or all of your position.
+                        </p>
+                      )}
                     </div>
 
                     <div className="rounded-lg border border-white/10 bg-black/40 px-3 py-2.5">
@@ -677,7 +812,7 @@ export default function DashboardPage() {
                       <button
                         type="submit"
                         className="inline-flex items-center justify-center rounded-full bg-emerald-400 px-3.5 py-1.5 text-xs font-semibold text-black shadow-[0_0_25px_rgba(52,211,153,0.55)] transition hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-70"
-                        disabled={sellSubmitting}
+                        disabled={sellSubmitting || exceedsOwnedShares}
                       >
                         {sellSubmitting ? "Listing..." : "List shares on market"}
                       </button>
